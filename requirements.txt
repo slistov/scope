@@ -1,2 +1,2 @@
 fastapi[all]
-elasticsearch[async]
+elasticsearch[async]==8.4.3
