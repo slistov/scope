@@ -2,7 +2,7 @@ from fastapi import FastAPI, Response, status, Body
 
 from .routers import user_router
 import json
-from elasticsearch import Elasticsearch
+from elasticsearch import AsyncElasticsearch
 import scope.entrypoints.schemas as schemas
 
 import ssl
@@ -17,21 +17,19 @@ def api_get_root():
     return Response(status_code=status.HTTP_200_OK)
 
 @app.post("/indexes")
-def api_indexes_add(doc: schemas.Quote = Body()):
-    es = Elasticsearch(
+async def api_indexes_add(doc: schemas.Quote = Body()):
+    es = AsyncElasticsearch(
         "https://192.168.99.100:9200", 
-        ca_certs="http_ca.crt",
         basic_auth=("elastic", "P18sc1v5CxZgqh9dhqGC"),
         verify_certs=False
     )
-    return es.index(index="index-quotes", id='1', document=doc.json())
+    return await es.index(index="index-quotes", id='1', document=doc.json())
 
 @app.get("/indexes")
-def api_indexes_get_by_id(index, id):
-    es = Elasticsearch(
+async def api_indexes_get_by_id(index, id):
+    es = AsyncElasticsearch(
         "https://192.168.99.100:9200", 
-        ca_certs="http_ca.crt",
         basic_auth=("elastic", "P18sc1v5CxZgqh9dhqGC"),
         verify_certs=False
     )
-    return es.get(index=index, id=id)
+    return await es.get(index=index, id=id)
