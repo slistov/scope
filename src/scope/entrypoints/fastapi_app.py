@@ -1,10 +1,11 @@
 from fastapi import FastAPI, Response, status, Body
-from fastapi.encoders import jsonable_encoder
 
 from .routers import user_router
 import json
 from elasticsearch import Elasticsearch
 import scope.entrypoints.schemas as schemas
+
+import ssl
 
 
 app = FastAPI()
@@ -17,10 +18,20 @@ def api_get_root():
 
 @app.post("/indexes")
 def api_indexes_add(doc: schemas.Quote = Body()):
-    doc_json = jsonable_encoder(doc)
     es = Elasticsearch(
         "https://192.168.99.100:9200", 
         ca_certs="http_ca.crt",
-        basic_auth=("elastic", '+*CZTWqSJpbACQnm1MRY')
+        basic_auth=("elastic", "P18sc1v5CxZgqh9dhqGC"),
+        verify_certs=False
     )
-    return es.index(index="index-quotes", id='1', document=doc_json)
+    return es.index(index="index-quotes", id='1', document=doc.json())
+
+@app.get("/indexes")
+def api_indexes_get_by_id(index, id):
+    es = Elasticsearch(
+        "https://192.168.99.100:9200", 
+        ca_certs="http_ca.crt",
+        basic_auth=("elastic", "P18sc1v5CxZgqh9dhqGC"),
+        verify_certs=False
+    )
+    return es.get(index=index, id=id)
