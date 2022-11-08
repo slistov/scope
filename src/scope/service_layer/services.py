@@ -1,5 +1,6 @@
 from typing import Dict, List
 from fastapi import HTTPException
+from ..domain import model
 
 
 class OauthRequester():
@@ -12,3 +13,7 @@ class OauthRequester():
         scopes = "read write".split()
         self.scopes.update({token: scopes})
         return True
+
+
+def add_doc_to_index(doc, index: model.Index):
+    
