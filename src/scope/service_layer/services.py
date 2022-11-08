@@ -16,4 +16,4 @@ class OauthRequester():
 
 
 def add_doc_to_index(doc, index: model.Index):
-    
+    pass

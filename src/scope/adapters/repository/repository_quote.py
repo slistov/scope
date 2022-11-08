@@ -23,5 +23,6 @@ class ElasticIndexDocsRepository(ElasticIndexDocsRepositoryAbstract):
         self.index.bul
 
     def _add(self, doc):
-        self.index.
+        pass
+        #self.index.
 
