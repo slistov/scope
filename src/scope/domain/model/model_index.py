@@ -1,5 +1,7 @@
-from typing import List, Any
+from typing import Any, List
+
 from .model_quote import Quote
+
 
 class Index:
     def __init__(self, index_name, mappings = {}, docs = []) -> None:

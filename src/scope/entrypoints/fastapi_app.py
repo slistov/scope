@@ -1,14 +1,11 @@
-from fastapi import FastAPI, Response, status, Body, Query, Depends
+from elasticsearch import AsyncElasticsearch
+from fastapi import Body, Depends, FastAPI, Response, status
 from fastapi.encoders import jsonable_encoder
 
-from .routers import user_router
-import json
-from elasticsearch import AsyncElasticsearch
 import scope.entrypoints.schemas as schemas
-import ssl
 
 from .. import config
-
+from .routers import user_router
 
 app = FastAPI()
 
@@ -22,6 +19,7 @@ def api_get_root():
 
 @app.put("/indexes")
 async def api_indexes_add():
+    
     user, password = config.get_es_user_credentials()
     es = AsyncElasticsearch(
         config.get_es_uri(), 

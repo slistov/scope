@@ -1,6 +1,8 @@
-from pydantic import BaseModel
-from fastapi import Query
 from typing import Optional
+
+from fastapi import Query
+from pydantic import BaseModel
+
 
 class Quote(BaseModel):
     movie: str
