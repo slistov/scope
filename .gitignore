@@ -3,3 +3,4 @@ __pycache__/
 scope.egg-info/
 *.tar
 *.gz
+.env
