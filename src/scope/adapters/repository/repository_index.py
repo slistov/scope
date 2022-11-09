@@ -11,14 +11,14 @@ class ElasticIndexRepositoryAbstract(abc.ABC):
     # def __init__(self) -> None:
     #     self.docs = []
 
-    def add(self, index: model.Index):
-        self._add(index)
+    async def add(self, index: model.Index):
+        await self._add(index)
     
-    def get_index_by_name(self, index_name) -> model.Index:
-        return self._get_index_by_name(index_name)
+    async def get_index_by_name(self, index_name) -> model.Index:
+        return await self._get_index_by_name(index_name)
     
-    def add_docs_bulk(self, index_name, docs_bulk):
-        self._add_docs(index_name, docs_bulk)
+    async def add_docs_bulk(self, index_name, docs_bulk):
+        await self._add_docs_bulk(index_name, docs_bulk)
 
     @abc.abstractmethod
     def _add(self, index: model.Index):
@@ -47,7 +47,8 @@ class ElasticIndexRepository(ElasticIndexRepositoryAbstract):
     
     async def _add_docs_bulk(self, index_name, docs_bulk):
         try:
-            return await async_bulk(self.elasticsearch, docs_bulk)
-        except:
+            result = await async_bulk(self.elasticsearch, docs_bulk, index=index_name)
+            return result
+        except Exception as e:
             return False
 
