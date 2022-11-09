@@ -8,9 +8,6 @@ from ...domain import model
 
 
 class ElasticIndexRepositoryAbstract(abc.ABC):
-    # def __init__(self) -> None:
-    #     self.docs = []
-
     async def add(self, index: model.Index):
         await self._add(index)
     
@@ -19,6 +16,9 @@ class ElasticIndexRepositoryAbstract(abc.ABC):
     
     async def add_docs_bulk(self, index_name, docs_bulk):
         await self._add_docs_bulk(index_name, docs_bulk)
+
+    async def search(self, index_name, text):
+        return await self._search(index_name, text)
 
     @abc.abstractmethod
     def _add(self, index: model.Index):
@@ -32,11 +32,12 @@ class ElasticIndexRepositoryAbstract(abc.ABC):
     def _get_index_by_name(self, index_name) -> model.Index:
         raise NotImplementedError
     
+    async def _search(self, index_name, text):
+        raise NotImplementedError
 
 
 class ElasticIndexRepository(ElasticIndexRepositoryAbstract):
     def __init__(self, elasticsearch: AsyncElasticsearch) -> None:
-        # super().__init__()
         self.elasticsearch = elasticsearch
 
     async def _add(self, index: model.Index):
@@ -51,4 +52,8 @@ class ElasticIndexRepository(ElasticIndexRepositoryAbstract):
             return result
         except Exception as e:
             return False
+    
+    async def _search(self, index_name, text):
+        return await self.elasticsearch.search(index=index_name, query={"match": {"quote": text}})
+
 
