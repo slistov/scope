@@ -1,4 +1,3 @@
 fastapi[all]
-elasticsearch[async]==8.4.3
 pytest
 pydantic

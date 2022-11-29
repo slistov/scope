@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends
 from ..dependencies import token_scopes_read_write
 
 
-
 user_router = APIRouter(
     prefix="/users",
     tags=["users"],

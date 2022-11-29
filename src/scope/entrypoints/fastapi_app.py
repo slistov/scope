@@ -1,4 +1,3 @@
-from elasticsearch import AsyncElasticsearch
 from fastapi import Body, Depends, FastAPI, Response, status
 from fastapi.encoders import jsonable_encoder
 
@@ -17,20 +16,6 @@ app.include_router(user_router)
 @app.get('/')
 def api_get_root():
     return Response(status_code=status.HTTP_200_OK)
-
-
-@app.put("/indices/{index_name}")
-async def api_indexes_add(index_name: str, docs_bulk = Body()):
-    elastic_repo = dependencies.elastic_repo
-    return await services.add_doc_to_index(elastic_repo, index_name, docs_bulk)
-
-
-@app.get("/indices/{index_name}")
-async def api_search_index_for_text(index_name, text):
-    elastic_repo = dependencies.elastic_repo    
-    return await services.search_index_for_text(elastic_repo, index_name, text)
-
-
 
 
 
