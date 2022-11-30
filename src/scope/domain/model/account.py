@@ -7,10 +7,11 @@ from .email import Email
 class Account:
     emails: List[Email] = []
 
-    def __init__(self, email) -> None:
+    def __init__(self, email, password) -> None:
         self.fio = ''
-        first_email = Email(email, True)
+        first_email = Email(email, is_main=True)
         self.emails.append(first_email)
+        self.password = 
         self.created = datetime.utcnow()
 
     def get_main_email(self):

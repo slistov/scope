@@ -8,7 +8,10 @@ from .. import config
 
 async def get_query_token(access_token: str = Header()):
     if not access_token:
-        raise HTTPException(status_code=400, detail="No access_token provided!")
+        raise HTTPException(
+            status_code=400,
+            detail="No access_token provided!"
+        )
     return access_token
 
 
@@ -18,7 +21,7 @@ async def get_token_oauthService_validated(
     oauth_requester = services.OauthRequester()
     if not oauth_requester.validate_token(token):
         raise HTTPException(
-                status_code=400, 
+                status_code=400,
                 detail="access_token header invalid"
             )
     return oauth_requester.scopes[token]

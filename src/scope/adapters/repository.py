@@ -12,13 +12,13 @@ DEFAULT_SESSION_FACTORY = sessionmaker(
 )
 
 
-class SQLAlchemyRepository:
+class SQLAlchemyAccountsRepository:
     def __init__(self, session=DEFAULT_SESSION_FACTORY):
-        self.session = session
+        self.session = session()
 
     def add(self, account: model.Account):
         self.session.add(account)
-
+    
     def get_by_email(self, email) -> model.Account:
         return (
             self.session.query(model.Account)
@@ -26,3 +26,15 @@ class SQLAlchemyRepository:
             .filter(orm.emails.c.email == email)
             .first()
         )
+
+    def __enter__(self, *args):
+        self.session = self.session_factory()
+
+    def __exit__(self, *args):
+        self.session.close()
+
+    def commit(self):
+        self.session.commit()
+
+    def rollback(self):
+        self.session.rollback()

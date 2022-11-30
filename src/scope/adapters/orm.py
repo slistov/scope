@@ -10,7 +10,6 @@ from sqlalchemy import (
 )
 
 from ..domain import model
-# from sqlalchemy import event
 
 from sqlalchemy.orm import registry, relationship
 
@@ -39,8 +38,9 @@ emails = Table(
         server_default=FetchedValue()
     ),
     Column('email', String),
+    Column('check_code', String, nullable=False),
     Column('created', DateTime),
-    Column('account', Integer, ForeignKey('account.id'), nullable=False),
+    Column('account', Integer, ForeignKey('accounts.id')),
     Column('is_main', Boolean),
     Column('is_checked', Boolean)
 )

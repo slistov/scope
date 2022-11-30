@@ -1,12 +1,13 @@
 from fastapi import FastAPI, Response, status
 
-from .routers import user_router
+from .routers import account_router, email_router
 from ..adapters import orm
 
 app = FastAPI()
 orm.start_mappers()
 
-app.include_router(user_router)
+app.include_router(account_router)
+app.include_router(email_router)
 
 
 @app.get('/')

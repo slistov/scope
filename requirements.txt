@@ -2,3 +2,6 @@ fastapi[all]
 pytest
 pydantic
 sqlalchemy
+psycopg2
+alembic
+passlib
