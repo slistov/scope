@@ -1,1 +1,0 @@
-from .repository_index import ElasticIndexRepository, ElasticIndexRepositoryAbstract
