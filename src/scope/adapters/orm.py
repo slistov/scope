@@ -42,13 +42,13 @@ emails = Table(
     Column('created', DateTime),
     Column('account', Integer, ForeignKey('account.id'), nullable=False),
     Column('is_main', Boolean),
-    Column('is_checked', Boolean)    
+    Column('is_checked', Boolean)
 )
 
 
 def start_mappers():
-    emails_mapper = mapper_registry.map_imperatively(model.Email, emails)    
-    accounts_mapper = mapper_registry.map_imperatively(
+    emails_mapper = mapper_registry.map_imperatively(model.Email, emails)
+    mapper_registry.map_imperatively(
         model.Account,
         accounts,
         properties={

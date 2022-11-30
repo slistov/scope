@@ -24,4 +24,3 @@ class TestAccount:
     def test_single_email_marked_as_main(self):
         account = model.Account("test@test.com")
         assert account.get_main_email() == "test@test.com"
-    

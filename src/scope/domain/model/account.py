@@ -12,7 +12,7 @@ class Account:
         first_email = Email(email, True)
         self.emails.append(first_email)
         self.created = datetime.utcnow()
-    
+
     def get_main_email(self):
         for email in self.emails:
             if email.is_main:
