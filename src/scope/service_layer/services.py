@@ -15,3 +15,4 @@ class OauthRequester():
         scopes = "read write".split()
         self.scopes.update({token: scopes})
         return True
+
