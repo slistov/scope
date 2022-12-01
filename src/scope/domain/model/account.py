@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List
 
 from .email import Email
+from ..security import get_secret_hash
 
 
 class Account:
@@ -11,7 +12,7 @@ class Account:
         self.fio = ''
         first_email = Email(email, is_main=True)
         self.emails.append(first_email)
-        self.password = 
+        self.hashed_password = get_secret_hash(password)
         self.created = datetime.utcnow()
 
     def get_main_email(self):

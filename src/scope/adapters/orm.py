@@ -25,6 +25,7 @@ accounts = Table(
         server_default=FetchedValue()
     ),
     Column('fio', String),
+    Column('hashed_password', String),
     Column('created', DateTime)
 )
 
