@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Query
 from ..dependencies import token_scopes_read_write
-from ...service_layer.services import create_account
+from ...service_layer.services import create_account, confirm_email
 
 
 account_router = APIRouter(
@@ -12,7 +12,7 @@ account_router = APIRouter(
 
 @account_router.post(
     path="/",
-    description="Create account, using contact data. Confirmation code will be sent"
+    description="Create account. Confirmation code will be sent"
 )
 async def api_create_account(
     email: str = Query(..., description="Email to register"),
@@ -21,9 +21,9 @@ async def api_create_account(
     return await create_account(email, password)
 
 
-@account_router.get("/")
-def api_users_get():
-    return {"message": "ok"}
+@account_router.get(path="/confirm")
+async def api_users_get(email, code):
+    return confirm_email(email, code)
 
 
 # dependencies=[Depends(token_scopes_read_write)],

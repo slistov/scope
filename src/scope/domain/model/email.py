@@ -23,7 +23,7 @@ class Email:
 
     def confirm(self, code):
         """Check confirmation code
-        
+
         If code is ok, then mark email as checked"""
         if self.is_checked:
             return True

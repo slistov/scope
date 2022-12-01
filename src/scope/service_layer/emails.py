@@ -1,4 +1,5 @@
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from ..config import get_api_host
 
 
 conf = ConnectionConfig(
@@ -13,14 +14,17 @@ conf = ConnectionConfig(
     VALIDATE_CERTS=True
 )
 
+API_HOST = get_api_host()
+
 
 async def send_confirm_email(email, code):
+
     html = f"""
     <p>Email confirmation code</p>
     <p>Your code is</p>
     <p><em>{code}</em></p>
     <p>...or you can just click the link below</p>
-    <a href="http://127.0.0.1/emails?code={code}">Confirm my email</a>
+    <a href="{API_HOST}/accounts/confirm?email={email}&code={code}">Confirm my email</a>
     """
 
     message = MessageSchema(
