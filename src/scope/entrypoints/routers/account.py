@@ -1,27 +1,29 @@
 from fastapi import APIRouter, Depends, Query
 from ..dependencies import token_scopes_read_write
-from ...service_layer.services import get_email_check_code
-
+from ...service_layer.services import create_account
 
 
 account_router = APIRouter(
     prefix="/accounts",
     tags=["accounts"],
-    dependencies=[Depends(token_scopes_read_write)],
     responses={404: {"description": "Not found"}}
 )
 
 
 @account_router.post(
     path="/",
-    description="Get confirmation code for email provided"
+    description="Create account, using contact data. Confirmation code will be sent"
 )
-def api_get_confirmation_code(
-    email: str = Query(..., description="Email to register")
+def api_create_account(
+    email: str = Query(..., description="Email to register"),
+    password: str = Query(..., description="User password")
 ):
-    return get_email_check_code(email)
+    return create_account(email, password)
 
 
 @account_router.get("/")
 def api_users_get():
     return {"message": "ok"}
+
+
+# dependencies=[Depends(token_scopes_read_write)],

@@ -19,10 +19,11 @@ class OauthRequester():
         return True
 
 
-def get_email_check_code(email, repo=SQLAlchemyAccountsRepository()):
+def create_account(email, password, repo=SQLAlchemyAccountsRepository()):
     with repo:
-        a = model.Account()
-        e = repo.add(email)
+        e = model.Email(email, is_main=True)
+        a = model.Account(email=e, password=password)
+        repo.add(a)
         repo.commit()
         return {"check_code": e.get_check_code()}
 

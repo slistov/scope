@@ -1,6 +1,6 @@
 from fastapi import Query
 from fastapi.routing import APIRouter
-from ...service_layer.services import get_email_check_code
+from ...service_layer.services import create_account
 
 
 email_router = APIRouter(
@@ -17,4 +17,4 @@ email_router = APIRouter(
 def api_get_confirmation_code(
     email: str = Query(..., description="Email to register")
 ):
-    return get_email_check_code(email)
+    return create_account(email)

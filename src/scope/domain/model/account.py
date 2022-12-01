@@ -8,10 +8,9 @@ from ..security import get_secret_hash
 class Account:
     emails: List[Email] = []
 
-    def __init__(self, email, password) -> None:
+    def __init__(self, email: Email, password) -> None:
         self.fio = ''
-        first_email = Email(email, is_main=True)
-        self.emails.append(first_email)
+        self.emails.append(email)
         self.hashed_password = get_secret_hash(password)
         self.created = datetime.utcnow()
 
