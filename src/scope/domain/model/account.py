@@ -30,3 +30,6 @@ class Account:
             else:
                 email.unset_main()
         return main_email
+
+    def get_hashed_password(self):
+        return self.hashed_password

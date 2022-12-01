@@ -1,5 +1,5 @@
 from src.scope.domain import model
-from scope.domain.security import get_secret_hash
+from src.scope.domain.security import verify_password
 
 
 class TestEmailCheckCode:
@@ -25,4 +25,7 @@ class TestAccount:
     def test_single_email_marked_as_main(self):
         account = model.Account(email="test@test.com", password="test_password")
         assert account.get_main_email() == "test@test.com"
-        assert account.get_password_hash() == get_secret_hash("test_password")
+
+    def test_hashed_password(self):
+        account = model.Account(email="test@test.com", password="test_password")
+        assert verify_password("test_password", account.get_hashed_password())
