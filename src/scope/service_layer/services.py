@@ -2,6 +2,7 @@ from typing import Dict, List
 from fastapi import HTTPException
 from ..domain import model
 from ..adapters.repository import SQLAlchemyAccountsRepository
+from .emails import send_confirm_email
 
 
 class OauthRequester():
@@ -19,9 +20,10 @@ class OauthRequester():
         return True
 
 
-def create_account(email, password, repo=SQLAlchemyAccountsRepository()):
+async def create_account(email, password, repo=SQLAlchemyAccountsRepository()):
     with repo:
         e = model.Email(email, is_main=True)
+        await send_confirm_email(e.email, e.check_code)
         a = model.Account(email=e, password=password)
         repo.add(a)
         repo.commit()

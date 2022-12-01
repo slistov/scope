@@ -22,6 +22,9 @@ class Email:
         self.is_main = False
 
     def confirm(self, code):
+        """Check confirmation code
+        
+        If code is ok, then mark email as checked"""
         if self.is_checked:
             return True
         if self.get_check_code() == code:

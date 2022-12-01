@@ -29,3 +29,7 @@ class TestAccount:
     def test_hashed_password(self):
         account = model.Account(email="test@test.com", password="test_password")
         assert verify_password("test_password", account.get_hashed_password())
+
+
+# class TestAccountCreation
+# FakeRepo must be used

@@ -14,11 +14,11 @@ account_router = APIRouter(
     path="/",
     description="Create account, using contact data. Confirmation code will be sent"
 )
-def api_create_account(
+async def api_create_account(
     email: str = Query(..., description="Email to register"),
     password: str = Query(..., description="User password")
 ):
-    return create_account(email, password)
+    return await create_account(email, password)
 
 
 @account_router.get("/")
