@@ -1,4 +1,5 @@
 .venv/
+.vscode/
 __pycache__/
 scope.egg-info/
 *.tar
