@@ -6,3 +6,4 @@ psycopg2
 alembic
 passlib
 fastapi_mail
+google-api-python-client
