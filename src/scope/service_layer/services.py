@@ -12,6 +12,10 @@ from .emails import send_confirm_email
 
 
 class OAuthRequester():
+    code_url = ''
+    scopes = []
+    token_url = ''
+
     def __init__(self) -> None:
         self.scopes: Dict[str: List] = {}
         self.code = ''
