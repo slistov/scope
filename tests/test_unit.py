@@ -2,6 +2,19 @@ from src.scope.domain import model
 from src.scope.domain.security import verify_password
 
 
+#TODO is not completed
+class FakeOAuthRequester():
+    def validate_token(self, token: str):
+        if not token == 'test_token':
+            raise HTTPException(
+                status_code=400,
+                detail={'error': 'not test_token'}
+            )
+        scopes = "read write".split()
+        self.scopes.update({token: scopes})
+        return True
+
+
 class TestEmailCheckCode:
     def test_generate_check_code(self):
         email = model.Email("test@test.com")
@@ -23,7 +36,7 @@ class TestEmailCheckCode:
 
 class TestAccount:
     def test_single_email_marked_as_main(self):
-        account = model.Account(email="test@test.com", password="test_password")
+        account = model.Account(email=model.Email("test@test.com", is_main=True), password="test_password")
         assert account.get_main_email() == "test@test.com"
 
     def test_hashed_password(self):

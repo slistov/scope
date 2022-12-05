@@ -1,12 +1,13 @@
 from fastapi import FastAPI, Response, status
 
-from .routers import account_router
+from .routers import account_router, oauth_router
 from ..adapters import orm
 
 app = FastAPI()
 orm.start_mappers()
 
-app.include_router(account_router)
+app.include_router(account_router, prefix='/api')
+app.include_router(oauth_router, prefix='/api')
 
 
 @app.get('/')
