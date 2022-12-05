@@ -32,4 +32,3 @@ async def api_get_oauth_redirect_uri(provider_name) -> RedirectResponse:
             }
         )
     return RedirectResponse(provider.get_auth_code_redirect_uri())
-

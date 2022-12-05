@@ -16,6 +16,4 @@ async def api_google_callback(
         params: schemas.OAuthGoogleCallback = Depends()
 ):
     pass
-    
     return 200
-
