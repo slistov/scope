@@ -2,6 +2,8 @@ from fastapi.routing import APIRouter
 from fastapi.responses import RedirectResponse
 from fastapi.exceptions import HTTPException
 
+from ...service_layer.services import services
+
 from .google import google_router
 from ...service_layer import services
 

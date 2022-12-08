@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Query
 from ..dependencies import token_scopes_read_write
-from ...service_layer.services import create_account, confirm_email
+from ...service_layer.services.services import create_account, confirm_email
 
 
 account_router = APIRouter(

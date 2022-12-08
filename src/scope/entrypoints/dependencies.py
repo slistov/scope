@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import Depends, Header, HTTPException
 
-from ..service_layer import services
+from ..service_layer.services import services
 from .. import config
 
 

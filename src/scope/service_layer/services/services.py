@@ -3,12 +3,12 @@ import abc
 from typing import Dict, List
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
-from ..domain import model
-from ..adapters.repository import (
+from ...domain import model
+from ...adapters.repository import (
     SQLAlchemyAccountsRepository,
     SQLAlchemyEmailsRepository
 )
-from .emails import send_confirm_email
+from ..emails import send_confirm_email
 
 
 class OAuthRequester():
