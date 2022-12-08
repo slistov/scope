@@ -5,3 +5,4 @@ scope.egg-info/
 *.tar
 *.gz
 .env
+client_secret*.json
