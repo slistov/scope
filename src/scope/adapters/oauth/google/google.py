@@ -1,9 +1,10 @@
-from ..services import OAuthRequester
+from ..provider import OAuthProvider
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 
 
-class OAuthGoogleRequester(OAuthRequester):
+class OAuthGoogleProvider(OAuthProvider):
+    name = 'google'
     code_url = 'https://accounts.google.com/o/oauth2/v2/auth'
     scopes = ['https://www.googleapis.com/auth/userinfo.email']
     token_url = 'https://oauth2.googleapis.com/token'
