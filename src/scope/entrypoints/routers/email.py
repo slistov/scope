@@ -1,6 +1,6 @@
 from fastapi import Query
 from fastapi.routing import APIRouter
-from ...service_layer.services.services import create_account
+from ...service_layer.services import create_account
 
 
 email_router = APIRouter(

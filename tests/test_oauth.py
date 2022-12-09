@@ -5,17 +5,22 @@ from urllib.parse import urlencode
 
 
 class FakeOAuthProvider(OAuthProvider):
-    code_url = "http://provider.org/api/oauth/authorize"
-    scopes = ['test_scope']
-    token_url = 'http://provider.org/api/oauth/token'
+    def __init__(self) -> None:
+        super().__init__(
+            name='fake',
+            code_url="http://provider.org/api/oauth/authorize",
+            scopes=['test_scope'],
+            token_url='http://provider.org/api/oauth/token',
+            state='test_state'
+        )
 
     def _get_auth_code_redirect_uri(self):
         params = {
             'response_type': 'code',
             'client_id': 'test_client_id',
             'redirect_uri': 'http://test.org/callback',
-            'state': 'test_state',
-            'scope': 'test_scope'
+            'state': self.state,
+            'scope': self.get_scopes_str(),
         }
         return f"{self.code_url}?{urlencode(params)}"
 

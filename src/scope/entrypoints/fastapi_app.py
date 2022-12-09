@@ -13,6 +13,7 @@ app.include_router(oauth_router, prefix='/api')
 
 app.add_middleware(SessionMiddleware, secret_key=generate_client_secret())
 
+
 @app.get('/')
 def api_get_root():
     return Response(status_code=status.HTTP_200_OK)
