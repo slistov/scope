@@ -1,13 +1,13 @@
 import abc
 from .provider import OAuthProvider
-from urllib.parse import urlencode
-
-# from typing import Dict, List
 
 
 class OAuthRequester:
-    def __init__(self, provider) -> None:
+    def __init__(self, provider: OAuthProvider) -> None:
         self.provider = provider
+
+    def get_state(self):
+        return self.provider.get_state()
 
     def get_auth_code_redirect_uri(self):
         return self.provider.get_auth_code_redirect_uri()
