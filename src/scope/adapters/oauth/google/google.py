@@ -28,5 +28,5 @@ class OAuthGoogleProvider(OAuthProvider):
             )
         return authorization_url
 
-    def _exchange_code_for_token(self):
-        pass
+    def _exchange_code_for_token(self, code):
+        self.flow.fetch_token(code=code)

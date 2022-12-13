@@ -40,3 +40,10 @@ def confirm_email(email, code, repo=SQLAlchemyEmailsRepository()):
 def get_oauth_redirect(provider: OAuthProvider) -> str:
     requester = OAuthRequester(provider)
     return requester.get_auth_code_redirect_uri()
+
+
+async def exchange_code_for_token(code, provider: OAuthProvider) -> str:
+    requester = OAuthRequester(provider)
+    token = await requester.exchange_code_for_token(code)
+    user = await requester.parse_id_token(token)
+    return 200
