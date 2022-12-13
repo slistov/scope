@@ -1,5 +1,7 @@
 from passlib.context import CryptContext
 from passlib.totp import generate_secret as passlib_generate_secret
+from jose import JWTError, jwt
+from ..config import SECORITY_KEY, ALGORITHM
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -23,3 +25,6 @@ def generate_client_secret():
 def get_hashed_client_secret():
     return get_secret_hash(generate_client_secret())
 
+
+def decode_jwt(token):
+    return jwt.decode(token, SECORITY_KEY, algorithms=[ALGORITHM])

@@ -12,8 +12,11 @@ class OAuthRequester:
     def get_auth_code_redirect_uri(self):
         return self.provider.get_auth_code_redirect_uri()
 
-    def exchange_code_for_token(self):
-        return self._exchange_code_for_token()
+    def exchange_code_for_token(self, code):
+        return self.provider._exchange_code_for_token(code)
+    
+    def parse_id_token(self):
+        return self.provider._parse_id_token()
 
     def validate_token(self, token: str):
         return self._validate_token(token)
@@ -22,7 +25,7 @@ class OAuthRequester:
         return self._get_access_token_validated()
 
     @abc.abstractmethod
-    def _exchange_code_for_token(self):
+    def _exchange_code_for_token(self, code):
         return NotImplementedError
 
     @abc.abstractmethod
