@@ -6,7 +6,7 @@ load_dotenv()
 
 config = yaml.safe_load(open("config.yaml", mode="r", encoding="utf-8"))
 
-SECORITY_KEY = os.environ.get("SECORITY_KEY")
+SECURITY_KEY = os.environ.get("SECURITY_KEY")
 ALGORITHM = os.environ.get("ALGORITHM")
 
 

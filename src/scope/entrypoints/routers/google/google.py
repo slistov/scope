@@ -19,6 +19,6 @@ def api_google_callback(
     params: schemas.OAuthGoogleCallback = Depends(),
 ):
     provider = oauth.OAuthGoogleProvider()
-    token = services.exchange_code_for_token(code=params.code, provider=provider)
-    user_email = provider.get_user_email(token)
+    token = services.exchange_code_for_token(params.code, provider)
+    user_email = provider.get_user_email()
     return user_email

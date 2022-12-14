@@ -9,7 +9,9 @@ conf = ConnectionConfig(
     MAIL_PORT=465,
     MAIL_SERVER="smtp.yandex.ru",
     MAIL_FROM_NAME="IT-aces scope service",
-    MAIL_SSL=True,
+    MAIL_STARTTLS=False,
+    MAIL_SSL_TLS=True,
+    # MAIL_SSL=True,
     USE_CREDENTIALS=True,
     VALIDATE_CERTS=True
 )

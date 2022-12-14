@@ -38,10 +38,12 @@ class OAuthGoogleProvider(OAuthProvider):
 
     def get_user_email(self):
         id_token = self.credentials.id_token
-        token_data = security.decode_jwt(id_token)
         try:
+            token_data = security.decode_jwt(id_token, algorithm='RS256', verify_signature=True)
             email = token_data['email']
-        except IndentationError:
+        except IndexError:
             pass
+            return None
+        except Exception as e:
             return None
         return email
