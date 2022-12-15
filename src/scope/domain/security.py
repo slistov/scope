@@ -1,8 +1,7 @@
 from passlib.context import CryptContext
 from passlib.totp import generate_secret as passlib_generate_secret
-from jose import JWTError, jwt, jwk
-from ..config import SECURITY_KEY, ALGORITHM
-from authlib.integrations.starlette_client import OAuth
+from jose import jwt
+
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
