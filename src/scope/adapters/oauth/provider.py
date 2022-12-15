@@ -1,9 +1,11 @@
 import abc
-from ...domain import security
 from typing import List
-from ... import config
+
 import aiohttp
-import base64
+from jose import jws, jwt
+
+from ... import config
+from ...domain import security
 
 
 class OAuthProvider:
@@ -32,8 +34,8 @@ class OAuthProvider:
     def _get_authorize_uri(self):
         raise NotImplementedError
 
-    def get_user_email(self):
-        parsed_id_token = self._parse_id_token()
+    async def get_user_email(self):
+        parsed_id_token = await self._parse_id_token()
         return parsed_id_token['email']
 
     def _get_redirect_uri(self):
@@ -45,12 +47,12 @@ class OAuthProvider:
 
     async def _request_public_keys(self):
         assert self.public_keys_url
-        keys = await async_get_request(self.public_keys_url)
-        return keys
+        result = await async_get_request(self.public_keys_url)
+        return result['keys']
 
-    def _get_public_key(self, kid):
+    async def _get_public_key(self, kid):
         if not self.public_keys or self.public_keys == []:
-            self.public_keys = self._request_public_keys()
+            self.public_keys = await self._request_public_keys()
         for key in self.public_keys:
             if key.pop("kid", None) == kid:
                 return key
@@ -59,19 +61,17 @@ class OAuthProvider:
     def __generate_state(self):
         return security.generate_secret()
 
-    def _parse_id_token(self):
+    async def _parse_id_token(self):
         id_token = self.credentials.id_token
-        jwt_header = id_token.split('.')[0]
-        header = base64.b64decode(jwt_header)
 
-        kid = header['kid']
-        alg = header['alg']
+        kid = jws.get_unverified_header(id_token)['kid']
+        alg = jws.get_unverified_header(id_token)['alg']
         try:
-            token_data = security.decode_jwt(
+            token_data = jwt.decode(
                 id_token,
-                key=self._get_public_key(kid),
-                algorithm=alg,
-                verify_signature=True
+                key=await self._get_public_key(kid),
+                algorithms=[alg],
+                audience=self.flow.credentials.client_id
             )
         except Exception as e:
             return None

@@ -1,6 +1,7 @@
-from ..provider import OAuthProvider
 # import google.oauth2.credentials
 import google_auth_oauthlib.flow
+
+from ..provider import OAuthProvider
 
 
 class OAuthGoogleProvider(OAuthProvider):
@@ -10,8 +11,12 @@ class OAuthGoogleProvider(OAuthProvider):
         super().__init__(
             name='google',
             code_url='https://accounts.google.com/o/oauth2/v2/auth',
-            scopes=['https://www.googleapis.com/auth/userinfo.email', 'openid'],
+            scopes=[
+                'https://www.googleapis.com/auth/userinfo.email',
+                'openid'
+            ],
             token_url='https://oauth2.googleapis.com/token',
+            public_keys_url='https://www.googleapis.com/oauth2/v3/certs'
         )
         self.flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
             'client_secret.json',

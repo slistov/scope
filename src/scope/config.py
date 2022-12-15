@@ -1,6 +1,8 @@
-import yaml
 import os
+
+import yaml
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
@@ -15,8 +17,20 @@ def get_postgres_uri():
 
 
 def get_api_host():
-    return config['API_HOST']
+    return config['API']['HOST']
+
+
+def get_api_path():
+    return config['API']['PATH']
+
+
+def get_api_uri():
+    host = get_api_host()
+    path = get_api_path()
+    return f'{host}{path}'
 
 
 def get_oauth_redirect_uri():
-    return config['OAUTH_REDIRECT_URI']
+    api_uri = get_api_uri()
+    oauth_path = config['API']['OAUTH']['PATH']
+    return f"{api_uri}{oauth_path}"

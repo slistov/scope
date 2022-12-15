@@ -1,5 +1,5 @@
-API_HOST: http://127.0.0.1:8000
-API_PATH: /api
-
-OAUTH_PATH: /oauth
-OAUTH_REDIRECT_URL: ${API_HOST}${API_PATH}${OAUTH_PATH}
+API:
+  HOST: http://127.0.0.1:8000
+  PATH: /api
+  OAUTH:
+    PATH: /oauth

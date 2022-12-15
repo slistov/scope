@@ -1,14 +1,12 @@
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
-from ..domain import model
-from ..adapters.repository import (
-    SQLAlchemyAccountsRepository,
-    SQLAlchemyEmailsRepository
-)
-from .emails import send_confirm_email
 
-from ..adapters.oauth.requester import OAuthRequester
 from ..adapters.oauth.provider import OAuthProvider
+from ..adapters.oauth.requester import OAuthRequester
+from ..adapters.repository import (SQLAlchemyAccountsRepository,
+                                   SQLAlchemyEmailsRepository)
+from ..domain import model
+from .emails import send_confirm_email
 
 
 async def create_account(email, password, repo=SQLAlchemyAccountsRepository()):

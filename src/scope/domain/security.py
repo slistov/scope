@@ -1,7 +1,6 @@
+from jose import jwt
 from passlib.context import CryptContext
 from passlib.totp import generate_secret as passlib_generate_secret
-from jose import jwt
-
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -30,4 +29,9 @@ def decode_jwt(token, key, algorithm='HS256', verify_signature=True):
     if verify_signature:
         return jwt.decode(token, key, algorithms=[algorithm])
     else:
-        return jwt.decode(token, options={"verify_signature": False})
+        return jwt.decode(
+            token,
+            key,
+            algorithms=[algorithm],
+            options={"verify_signature": False}
+        )

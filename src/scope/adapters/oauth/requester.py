@@ -1,4 +1,5 @@
 import abc
+
 from .provider import OAuthProvider
 
 
@@ -14,7 +15,7 @@ class OAuthRequester:
 
     def exchange_code_for_token(self, code):
         return self.provider._exchange_code_for_token(code)
-    
+
     def parse_id_token(self):
         return self.provider._parse_id_token()
 
