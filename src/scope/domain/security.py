@@ -1,7 +1,8 @@
 from passlib.context import CryptContext
 from passlib.totp import generate_secret as passlib_generate_secret
-from jose import JWTError, jwt
+from jose import JWTError, jwt, jwk
 from ..config import SECURITY_KEY, ALGORITHM
+from authlib.integrations.starlette_client import OAuth
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -26,9 +27,8 @@ def get_hashed_client_secret():
     return get_secret_hash(generate_client_secret())
 
 
-def decode_jwt(token, algorithm='HS256', verify_signature=False):
+def decode_jwt(token, key, algorithm='HS256', verify_signature=True):
     if verify_signature:
-        jwt.
-        return jwt.decode(token, SECURITY_KEY, algorithms=[algorithm])
+        return jwt.decode(token, key, algorithms=[algorithm])
     else:
-        return jwt.decode(token, key=None, options={"verify_signature": False})
+        return jwt.decode(token, options={"verify_signature": False})

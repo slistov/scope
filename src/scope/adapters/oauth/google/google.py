@@ -17,10 +17,10 @@ class OAuthGoogleProvider(OAuthProvider):
         self.flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
             'client_secret.json',
             scopes=self.scopes,
-            redirect_uri='http://127.0.0.1:8000/api/oauth/google',
+            redirect_uri=self._get_redirect_uri(),
         )
 
-    def _get_auth_code_redirect_uri(self):
+    def _get_authorize_uri(self):
         authorization_url, _ = self.flow.authorization_url(
             access_type='offline',
             include_granted_scopes='true',
@@ -35,15 +35,3 @@ class OAuthGoogleProvider(OAuthProvider):
             return self.credentials
         except Exception as e:
             pass
-
-    def get_user_email(self):
-        id_token = self.credentials.id_token
-        try:
-            token_data = security.decode_jwt(id_token, algorithm='RS256', verify_signature=True)
-            email = token_data['email']
-        except IndexError:
-            pass
-            return None
-        except Exception as e:
-            return None
-        return email

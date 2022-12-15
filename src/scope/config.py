@@ -13,5 +13,10 @@ ALGORITHM = os.environ.get("ALGORITHM")
 def get_postgres_uri():
     return os.environ.get("DB_URI")
 
+
 def get_api_host():
     return config['API_HOST']
+
+
+def get_oauth_redirect_uri():
+    return config['OAUTH_REDIRECT_URI']

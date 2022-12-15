@@ -20,7 +20,7 @@ class FakeOAuthProvider(OAuthProvider):
             'client_id': 'test_client_id',
             'redirect_uri': 'http://test.org/callback',
             'state': self.state,
-            'scope': self.get_scopes_str(),
+            'scope': self._get_scopes_str(),
         }
         return f"{self.code_url}?{urlencode(params)}"
 
