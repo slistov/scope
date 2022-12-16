@@ -1,5 +1,5 @@
 from fastapi import Depends
-from fastapi.requests import Request
+
 from fastapi.routing import APIRouter
 
 from ....adapters import oauth
@@ -15,7 +15,6 @@ google_router = APIRouter(
 
 @google_router.get("/")
 async def api_google_callback(
-    request: Request,
     params: schemas.OAuthGoogleCallback = Depends(),
 ):
     provider = oauth.OAuthGoogleProvider()

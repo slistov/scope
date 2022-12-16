@@ -10,8 +10,8 @@ class OAuthRequester:
     def get_state(self):
         return self.provider.get_state()
 
-    def get_auth_code_redirect_uri(self):
-        return self.provider.get_auth_code_redirect_uri()
+    def get_authorize_uri(self):
+        return self.provider.get_authorize_uri()
 
     def exchange_code_for_token(self, code):
         return self.provider._exchange_code_for_token(code)

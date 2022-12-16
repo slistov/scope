@@ -35,9 +35,9 @@ def confirm_email(email, code, repo=SQLAlchemyEmailsRepository()):
             )
 
 
-def get_oauth_redirect(provider: OAuthProvider) -> str:
+def get_oauth_authorize_uri(provider: OAuthProvider) -> str:
     requester = OAuthRequester(provider)
-    return requester.get_auth_code_redirect_uri()
+    return requester.get_authorize_uri()
 
 
 def exchange_code_for_token(code, provider: OAuthProvider) -> str:

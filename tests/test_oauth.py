@@ -14,7 +14,7 @@ class FakeOAuthProvider(OAuthProvider):
             state='test_state'
         )
 
-    def _get_auth_code_redirect_uri(self):
+    def _get_authorize_uri(self):
         params = {
             'response_type': 'code',
             'client_id': 'test_client_id',
@@ -29,9 +29,9 @@ class TestOAuth:
     def test_requester_returns_redirect_to_oauth_provider(self):
         fake_provider = FakeOAuthProvider()
         r = OAuthRequester(fake_provider)
-        assert r.get_auth_code_redirect_uri() == 'http://provider.org/api/oauth/authorize?response_type=code&client_id=test_client_id&redirect_uri=http%3A%2F%2Ftest.org%2Fcallback&state=test_state&scope=test_scope'
+        assert r.get_authorize_uri() == 'http://provider.org/api/oauth/authorize?response_type=code&client_id=test_client_id&redirect_uri=http%3A%2F%2Ftest.org%2Fcallback&state=test_state&scope=test_scope'
 
     def test_service_returns_redirect_to_oauth_provider(self):
         fake_provider = FakeOAuthProvider()
-        redirect_to_oauth = services.get_oauth_redirect(fake_provider)
+        redirect_to_oauth = services.get_oauth_authorize_uri(fake_provider)
         assert redirect_to_oauth == 'http://provider.org/api/oauth/authorize?response_type=code&client_id=test_client_id&redirect_uri=http%3A%2F%2Ftest.org%2Fcallback&state=test_state&scope=test_scope'
