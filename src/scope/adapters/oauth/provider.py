@@ -63,6 +63,7 @@ class OAuthProvider:
 
     async def _parse_id_token(self):
         id_token = self.credentials.id_token
+        access_token = self.credentials.token
 
         kid = jws.get_unverified_header(id_token)['kid']
         alg = jws.get_unverified_header(id_token)['alg']
@@ -71,7 +72,8 @@ class OAuthProvider:
                 id_token,
                 key=await self._get_public_key(kid),
                 algorithms=[alg],
-                audience=self.flow.credentials.client_id
+                audience=self.flow.credentials.client_id,
+                access_token=access_token
             )
         except Exception as e:
             return None
