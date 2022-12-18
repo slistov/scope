@@ -75,7 +75,7 @@ class OAuthProvider:
                 audience=self.flow.credentials.client_id,
                 access_token=access_token
             )
-        except Exception as e:
+        except Exception:
             return None
         return token_data
 

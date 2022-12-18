@@ -1,8 +1,9 @@
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from .. import config
 from ..domain import model
 from . import orm
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
-from .. import config
 
 DEFAULT_SESSION_FACTORY = sessionmaker(
     bind=create_engine(

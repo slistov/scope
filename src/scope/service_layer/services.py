@@ -7,7 +7,7 @@ from ..adapters.repository import (SQLAlchemyAccountsRepository,
                                    SQLAlchemyEmailsRepository)
 from ..domain import model
 from .emails import send_confirm_email
-
+from . import exceptions
 
 async def create_account(email, password, repo=SQLAlchemyAccountsRepository()):
     with repo:
@@ -44,3 +44,7 @@ def exchange_code_for_token(code, provider: OAuthProvider) -> str:
     requester = OAuthRequester(provider)
     token = requester.exchange_code_for_token(code)
     return token
+
+
+def validate_code_response(code, state, db_adapter):
+    authorization = db_adapter.
