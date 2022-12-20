@@ -44,7 +44,7 @@ class FakeDBAdapter:
         return None
 
 
-class TestProviderReturnsAuthorizeURL:
+class TestAuthorize:
     def test_requester_returns_redirect_to_oauth_provider(self):
         fake_provider = FakeOAuthProvider()
         r = OAuthRequester(fake_provider)
@@ -54,6 +54,12 @@ class TestProviderReturnsAuthorizeURL:
         fake_provider = FakeOAuthProvider()
         redirect_to_oauth = services.get_oauth_authorize_uri(fake_provider)
         assert redirect_to_oauth == 'http://provider.org/api/oauth/authorize?response_type=code&client_id=test_client_id&redirect_uri=http%3A%2F%2Ftest.org%2Fcallback&state=test_state&scope=test_scope'
+
+    def test_authorize_saves_state(self):
+        auth = model.Authorization(state='test_state')
+        state = auth.state
+        assert state
+        assert not state == ''
 
 
 class TestCallbackFromOAuthRecievesCode:

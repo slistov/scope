@@ -24,13 +24,12 @@ class OAuthGoogleProvider(OAuthProvider):
             redirect_uri=self._get_redirect_uri(),
         )
 
-    def _get_authorize_uri(self):
-        authorization_url, _ = self.flow.authorization_url(
+    def _get_authorize_uri_and_state(self):
+        authorization_url, state = self.flow.authorization_url(
             access_type='offline',
-            include_granted_scopes='true',
-            state=self.state
+            include_granted_scopes='true'
             )
-        return authorization_url
+        return authorization_url, state
 
     def _exchange_code_for_token(self, code):
         try:

@@ -27,8 +27,8 @@ class OAuthProvider:
         self.public_keys_url = public_keys_url
         self.public_keys = public_keys
 
-    def get_authorize_uri(self):
-        return self._get_authorize_uri()
+    def get_authorize_uri_and_state(self):
+        return self._get_authorize_uri_and_state()
 
     @abc.abstractmethod
     def _get_authorize_uri(self):

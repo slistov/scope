@@ -9,6 +9,7 @@ from ..domain import model
 from .emails import send_confirm_email
 from . import exceptions
 
+
 async def create_account(email, password, repo=SQLAlchemyAccountsRepository()):
     with repo:
         e = model.Email(email, is_main=True)
@@ -51,6 +52,6 @@ def validate_code_response(code, state, db_adapter: AbstractRepository):
     if not authorization:
         # TODO
         pass
-    
+
     authorization.code = code
     return {'message': 'authorization code accepted'}
