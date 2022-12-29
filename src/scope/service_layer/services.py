@@ -47,11 +47,11 @@ def exchange_code_for_token(code, provider: OAuthProvider) -> str:
     return token
 
 
-def validate_code_response(code, state, db_adapter: AbstractRepository):
-    authorization = db_adapter.get_authorization(state)
-    if not authorization:
-        # TODO
-        pass
+# def validate_code_response(code, state, db_adapter: AbstractRepository):
+#     authorization = db_adapter.get_authorization(state)
+#     if not authorization:
+#         # TODO
+#         pass
 
-    authorization.code = code
-    return {'message': 'authorization code accepted'}
+#     authorization.code = code
+#     return {'message': 'authorization code accepted'}

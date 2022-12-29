@@ -5,6 +5,8 @@ from fastapi.routing import APIRouter
 from ...adapters.oauth.google.google import OAuthGoogleProvider
 from .google import google_router
 
+from oauth_client_lib import OAuthProvider
+
 oauth_router = APIRouter(
     prefix="/oauth",
     tags=["OAuth 2.0"],
@@ -21,10 +23,24 @@ oauth_providers = {
 }
 
 
+# @oauth_router.get("/redirect")
+# async def api_get_oauth_redirect_uri(provider_name):
+#     try:
+#         provider = oauth_providers[provider_name]()
+#     except KeyError:
+#         return HTTPException(
+#             400,
+#             {
+#                 'error': 'provider_error',
+#                 'description': 'Invalid provider name specified'
+#             }
+#         )
+#     return RedirectResponse(provider.get_authorize_uri())
+
 @oauth_router.get("/redirect")
 async def api_get_oauth_redirect_uri(provider_name):
     try:
-        provider = oauth_providers[provider_name]()
+        provider = OAuthProvider(provider_name)
     except KeyError:
         return HTTPException(
             400,
