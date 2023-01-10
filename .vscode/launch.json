@@ -13,7 +13,7 @@
                 "src.scope.entrypoints.fastapi_app:app"
             ],
             "jinja": true,
-            "justMyCode": true,
+            "justMyCode": false,
             "env": {
                 "PYTHONDONTWRITEBYTECODE": "1"
             },

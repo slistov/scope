@@ -3,3 +3,28 @@ API:
   PATH: /api
   OAUTH:
     PATH: /oauth
+
+
+###########################################
+#    External OAuth services parameters   #
+###########################################
+oauth:
+  callback: /oauth/callback
+  providers:
+    google:
+      scopes: 
+      - https://www.googleapis.com/auth/userinfo.email
+      - openid
+      urls:
+        code: https://accounts.google.com/o/oauth2/v2/auth
+        token: https://oauth2.googleapis.com/token
+        public_keys: https://www.googleapis.com/oauth2/v3/certs
+      secrets:
+        client_id: 655857588737-dvupl27ddl03qceusdli8q229s065hlh.apps.googleusercontent.com
+        client-secret: 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
+
+
+#############################################
+#                LOGGING                    #
+#############################################
+ERROR_LOG_FILENAME: "oauth_client_lib.log"
