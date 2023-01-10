@@ -49,4 +49,5 @@ async def api_get_oauth_redirect_uri(provider_name):
                 'description': 'Invalid provider name specified'
             }
         )
-    return RedirectResponse(provider.get_authorize_uri())
+    uri = await provider.get_authorize_uri()
+    return RedirectResponse(uri)
