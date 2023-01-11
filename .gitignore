@@ -2,8 +2,10 @@
 .vscode/
 __pycache__/
 .pytest_cache/
-scope.egg-info/
+*.egg-info/
 *.tar
 *.gz
 .env
 client_secret*.json
+/*.egg-info/
+/*.egg-info/

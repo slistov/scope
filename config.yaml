@@ -9,7 +9,7 @@ API:
 #    External OAuth services parameters   #
 ###########################################
 oauth:
-  callback: /oauth/callback
+  callback: /api/oauth/callback
   providers:
     google:
       scopes: 

@@ -20,14 +20,6 @@ ERROR_LOG_FILENAME = config['ERROR_LOG_FILENAME']
 
 
 def get_oauth_params(provider_name):
-    # def load_oauth_secrets():
-    #     with open('client_secret.json') as f:
-    #         secrets = json.load(f)["web"]
-    #         return {
-    #             "client_id": secrets["client_id"],
-    #             "client_secret": secrets["client_secret"],
-    #         }
-
     assert config['oauth']['providers'][provider_name]['scopes']
     assert config['oauth']['providers'][provider_name]['urls']
     providers = config['oauth']['providers']

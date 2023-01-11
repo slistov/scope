@@ -8,18 +8,21 @@ from ..domain import commands, model
 from ..service_layer import messagebus, unit_of_work
 from . import exceptions
 from .. import config
+from ..adapters import orm
+
+orm.start_mappers()
 
 
 class OAuthProvider:
     def __init__(
         self,
         name,
+        client_id,
+        client_secret='',
         code_url=None,
         token_url=None,
         scopes=[],
         public_keys_url='',
-        client_id='',
-        client_secret=''
     ):
         _scopes, _code_url, _token_url, _public_keys_url = self._get_provider_params(name)
         self.name = name
@@ -54,10 +57,11 @@ class OAuthProvider:
             "response_type": "code",
             "client_id": self.client_id,
             "redirect_uri": get_oauth_callback_URL(),
-            "scope": self.scopes,
+            "scope": ' '.join(self.scopes),
             "state": state_code
         }
-        return f"{self.code_url}?{urlencode(params)}"
+        uri = f"{self.code_url}?{urlencode(params,)}"
+        return uri
 
     def _get_tokenRequest_data(self, grant):
         if grant.grant_type == "authorization_code":

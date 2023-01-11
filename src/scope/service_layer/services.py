@@ -1,13 +1,14 @@
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 
-from ..adapters.oauth.provider import OAuthProvider
-from ..adapters.oauth.requester import OAuthRequester
+from oauth_client_lib import OAuthProvider
+
 from ..adapters.repository import (SQLAlchemyAccountsRepository,
                                    SQLAlchemyEmailsRepository)
 from ..domain import model
 from .emails import send_confirm_email
 from . import exceptions
+from .. import config
 
 
 async def create_account(email, password, repo=SQLAlchemyAccountsRepository()):
@@ -36,9 +37,24 @@ def confirm_email(email, code, repo=SQLAlchemyEmailsRepository()):
             )
 
 
-def get_oauth_authorize_uri(provider: OAuthProvider) -> str:
-    requester = OAuthRequester(provider)
-    return requester.get_authorize_uri()
+async def get_oauth_authorize_uri(
+    provider: OAuthProvider = None,
+    provider_name: str = ''
+) -> str:
+    if not provider:
+        assert provider_name, "provider_name is not provided. Ex.: 'google'"
+        client_id, _ = config.get_oauth_secrets(provider_name)
+        try:
+            provider = OAuthProvider(provider_name, client_id=client_id)
+        except KeyError:
+            return HTTPException(
+                400,
+                {
+                    'error': 'provider_error',
+                    'description': 'Invalid provider name specified'
+                }
+            )
+    return await provider.get_authorize_uri()
 
 
 def exchange_code_for_token(code, provider: OAuthProvider) -> str:

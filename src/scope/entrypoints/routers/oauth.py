@@ -2,10 +2,10 @@ from fastapi.exceptions import HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.routing import APIRouter
 
-from ...adapters.oauth.google.google import OAuthGoogleProvider
+
 from .google import google_router
 
-from oauth_client_lib import OAuthProvider
+from ...service_layer import services
 
 oauth_router = APIRouter(
     prefix="/oauth",
@@ -18,9 +18,9 @@ oauth_router.include_router(google_router)
 
 
 # TODO move to config
-oauth_providers = {
-    'google': OAuthGoogleProvider
-}
+# oauth_providers = {
+#     'google': OAuthGoogleProvider
+# }
 
 
 # @oauth_router.get("/redirect")
@@ -39,15 +39,5 @@ oauth_providers = {
 
 @oauth_router.get("/redirect")
 async def api_get_oauth_redirect_uri(provider_name):
-    try:
-        provider = OAuthProvider(provider_name)
-    except KeyError:
-        return HTTPException(
-            400,
-            {
-                'error': 'provider_error',
-                'description': 'Invalid provider name specified'
-            }
-        )
-    uri = await provider.get_authorize_uri()
+    uri = await services.get_oauth_authorize_uri(provider_name=provider_name)
     return RedirectResponse(uri)

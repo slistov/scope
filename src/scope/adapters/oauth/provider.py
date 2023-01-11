@@ -12,14 +12,18 @@ class OAuthProvider:
     def __init__(
         self,
         name: str,
-        code_url,
-        scopes: List[str],
-        token_url,
-        state=None,
+        client_id,
+        client_secret,
+        code_url='',
+        scopes: List[str] = [],
+        token_url='',
+        state='',
         public_keys_url='',
-        public_keys: List[dict] = []
+        public_keys: List[dict] = [],
     ) -> None:
         self.name = name
+        self.client_id = client_id
+        self.client_secret = client_secret
         self.code_url = code_url
         self.scopes = scopes
         self.token_url = token_url
