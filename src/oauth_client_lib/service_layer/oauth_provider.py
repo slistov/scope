@@ -40,7 +40,8 @@ class OAuthProvider:
         [state_code] = await messagebus.handle(cmd, uow)
         return self._get_oauth_uri(state_code)
 
-    async def request_token(self, grant) -> requests.Response:
+    async def request_token(self, code) -> requests.Response:
+        
         data = self._get_tokenRequest_data(grant=grant)
         self.response = await self._post(
             url=self.token_url,

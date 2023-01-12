@@ -63,11 +63,14 @@ def exchange_code_for_token(code, provider: OAuthProvider) -> str:
     return token
 
 
-# def validate_code_response(code, state, db_adapter: AbstractRepository):
-#     authorization = db_adapter.get_authorization(state)
-#     if not authorization:
-#         # TODO
-#         pass
-
-#     authorization.code = code
-#     return {'message': 'authorization code accepted'}
+async def get_token_for_auth_code(state, code):
+    try:
+        provider = OAuthProvider(state=state)
+    except StateInvalid as e:
+        raise
+    except StateExpired as e:
+        raise
+    except AuthorizationInvalid as e:
+        raise
+    token = await provider.get_token(code)
+    return token

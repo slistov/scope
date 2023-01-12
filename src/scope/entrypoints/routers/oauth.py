@@ -41,3 +41,8 @@ oauth_router.include_router(google_router)
 async def api_get_oauth_redirect_uri(provider_name):
     uri = await services.get_oauth_authorize_uri(provider_name=provider_name)
     return RedirectResponse(uri)
+
+@oauth_router.get("/callback")
+async def api_oauth_callback(state, code):
+    token = await services.get_token_for_auth_code(state, code)
+    return token
