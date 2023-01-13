@@ -35,9 +35,3 @@ def get_oauth_redirect_uri():
     api_uri = get_api_uri()
     oauth_path = config['API']['OAUTH']['PATH']
     return f"{api_uri}{oauth_path}"
-
-
-def get_oauth_secrets(provider_name):
-    with open(f'client_secret_{provider_name}.json') as f:
-        secrets = json.load(f)["web"]
-        return secrets["client_id"], secrets["client_secret"]

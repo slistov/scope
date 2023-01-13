@@ -43,9 +43,8 @@ async def get_oauth_authorize_uri(
 ) -> str:
     if not provider:
         assert provider_name, "provider_name is not provided. Ex.: 'google'"
-        client_id, _ = config.get_oauth_secrets(provider_name)
         try:
-            provider = OAuthProvider(provider_name, client_id=client_id)
+            provider = OAuthProvider(provider_name)
         except KeyError:
             return HTTPException(
                 400,
@@ -65,7 +64,7 @@ def exchange_code_for_token(code, provider: OAuthProvider) -> str:
 
 async def get_token_for_auth_code(state, code):
     try:
-        provider = OAuthProvider(state=state)
+        provider = OAuthProvider.by_state(state=state)
     except StateInvalid as e:
         raise
     except StateExpired as e:

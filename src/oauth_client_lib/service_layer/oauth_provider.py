@@ -1,6 +1,7 @@
 from urllib.parse import urlencode
 
 import aiohttp
+import json
 import requests
 
 from ..config import get_oauth_callback_URL
@@ -16,22 +17,44 @@ orm.start_mappers()
 class OAuthProvider:
     def __init__(
         self,
-        name,
-        client_id,
+        provider_name,
+        client_id='',
         client_secret='',
         code_url=None,
         token_url=None,
         scopes=[],
         public_keys_url='',
     ):
-        _scopes, _code_url, _token_url, _public_keys_url = self._get_provider_params(name)
-        self.name = name
+        (
+            _scopes,
+            _code_url,
+            _token_url,
+            _public_keys_url
+        ) = self.__class__._get_provider_params(provider_name)
+
+        self.provider_name = provider_name
         self.code_url = code_url if code_url else _code_url
         self.token_url = token_url if token_url else _token_url
         self.scopes = scopes if scopes else _scopes
         self.public_keys_url = public_keys_url if public_keys_url else _public_keys_url
-        self.client_id = client_id
-        self.client_secret = client_secret
+
+        (
+            self.client_id,
+            self.client_secret
+        ) = self.__class__._get_oauth_secrets(provider_name)
+
+    @classmethod
+    def by_state(cls, state):
+        """OAuthProvider constructor by state"""
+        s = model.State(state)
+        a = model.Authorization(state=s)
+        return cls(a.provider_name)
+
+    @staticmethod
+    def _get_oauth_secrets(provider_name):
+        with open(f'client_secret_{provider_name}.json') as f:
+            secrets = json.load(f)["web"]
+            return secrets["client_id"], secrets["client_secret"]
 
     async def get_authorize_uri(self, uow=None):
         assert self.code_url, "code_url is not provided"
@@ -41,7 +64,6 @@ class OAuthProvider:
         return self._get_oauth_uri(state_code)
 
     async def request_token(self, code) -> requests.Response:
-        
         data = self._get_tokenRequest_data(grant=grant)
         self.response = await self._post(
             url=self.token_url,
@@ -49,7 +71,8 @@ class OAuthProvider:
         )
         return self.response
 
-    def _get_provider_params(self, name):
+    @staticmethod
+    def _get_provider_params(name):
         scopes, urls = config.get_oauth_params(name)
         return scopes, urls['code'], urls['token'], urls['public_keys']
 
