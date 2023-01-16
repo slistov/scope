@@ -65,11 +65,13 @@ def exchange_code_for_token(code, provider: OAuthProvider) -> str:
 async def get_token_for_auth_code(state, code):
     try:
         provider = OAuthProvider.by_state(state=state)
-    except StateInvalid as e:
-        raise
-    except StateExpired as e:
-        raise
-    except AuthorizationInvalid as e:
-        raise
+    except Exception as e:
+        pass
+    # except StateInvalid as e:
+    #     raise
+    # except StateExpired as e:
+    #     raise
+    # except AuthorizationInvalid as e:
+    #     raise
     token = await provider.get_token(code)
     return token

@@ -48,6 +48,19 @@ class OAuthProvider:
         """OAuthProvider constructor by state"""
         s = model.State(state)
         a = model.Authorization(state=s)
+
+        uow = unit_of_work.SqlAlchemyUnitOfWork()
+        actions_todo = [
+            commands.ProcessGrantRecieved(
+                params.state,
+                "authorization_code",
+                params.code
+            ),
+            commands.RequestToken(params.code)
+        ]
+        for msg in actions_todo:
+            messagebus.handle(msg, uow)
+
         return cls(a.provider_name)
 
     @staticmethod
