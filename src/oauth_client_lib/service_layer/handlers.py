@@ -20,6 +20,19 @@ async def create_authorization(
         return state.state
 
 
+async def get_oauth_uri(state_code):
+    client_id, _ = config.get_client_credentials()
+
+    params = {
+        "response_type": "code",
+        "client_id": client_id,
+        "redirect_uri": config.get_oauth_callback_URL(),
+        "scope": config.get_scope(),
+        "state": state_code
+    }
+    return f"{config.get_oauth_host()}?{urlencode(params)}"
+
+
 async def process_grant_recieved(
     cmd: commands.ProcessGrantRecieved,
     uow: unit_of_work.AbstractUnitOfWork
