@@ -13,9 +13,25 @@ from typing import Callable, Dict, List, Type, Union
 from ..domain import commands, events
 from . import handlers, unit_of_work
 
+from .. import config
+from urllib.parse import urlencode
+
 logger = logging.getLogger(__name__)
 
 Message = Union[commands.Command, events.Event]
+
+
+async def get_oauth_uri(state_code):
+    client_id, _ = config.get_oauth_params(provider_name=)
+
+    params = {
+        "response_type": "code",
+        "client_id": client_id,
+        "redirect_uri": config.get_oauth_callback_URL(),
+        "scope": config.get_scope(),
+        "state": state_code
+    }
+    return f"{config.get_oauth_host()}?{urlencode(params)}"
 
 
 async def handle(
