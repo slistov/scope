@@ -1,16 +1,16 @@
-<mxfile host="app.diagrams.net" modified="2023-01-19T11:54:48.774Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" etag="CSr8VhPrpvNVveN7k3lM" version="20.6.0" type="github">
+<mxfile host="app.diagrams.net" modified="2023-01-19T12:04:08.878Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" etag="XJLOehiCWz7s3E36sc_I" version="20.6.0" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="1348" dy="805" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
-        <mxCell id="8-UZZp7eL8nday4LSBE8-0" value="app&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="8-UZZp7eL8nday4LSBE8-0" value="app&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=bottom;labelPosition=center;verticalLabelPosition=top;align=center;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="240" y="80" width="80" height="380" as="geometry" />
         </mxCell>
-        <mxCell id="8-UZZp7eL8nday4LSBE8-1" value="lib" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="8-UZZp7eL8nday4LSBE8-1" value="lib" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=bottom;labelPosition=center;verticalLabelPosition=top;align=center;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="470" y="80" width="80" height="380" as="geometry" />
         </mxCell>
-        <mxCell id="8-UZZp7eL8nday4LSBE8-2" value="oauth provider&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="8-UZZp7eL8nday4LSBE8-2" value="oauth provider&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=bottom;labelPosition=center;verticalLabelPosition=top;align=center;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="720" y="80" width="80" height="380" as="geometry" />
         </mxCell>
         <mxCell id="8-UZZp7eL8nday4LSBE8-3" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
@@ -74,7 +74,29 @@
         </mxCell>
         <mxCell id="8-UZZp7eL8nday4LSBE8-17" value="authorization code" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="8-UZZp7eL8nday4LSBE8-16">
           <mxGeometry x="0.272" relative="1" as="geometry">
-            <mxPoint x="29" as="offset" />
+            <mxPoint x="29" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8-UZZp7eL8nday4LSBE8-18" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0.421;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0.421;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="269.5" as="sourcePoint" />
+            <mxPoint x="760" y="269.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8-UZZp7eL8nday4LSBE8-19" value="token request(code)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="8-UZZp7eL8nday4LSBE8-18">
+          <mxGeometry x="-0.104" y="-1" relative="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8-UZZp7eL8nday4LSBE8-20" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0.579;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0.579;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8-UZZp7eL8nday4LSBE8-2" target="8-UZZp7eL8nday4LSBE8-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="420" as="sourcePoint" />
+            <mxPoint x="440" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8-UZZp7eL8nday4LSBE8-21" value="token&lt;br&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="8-UZZp7eL8nday4LSBE8-20">
+          <mxGeometry x="0.144" y="1" relative="1" as="geometry">
+            <mxPoint x="13" y="-11" as="offset" />
           </mxGeometry>
         </mxCell>
       </root>
