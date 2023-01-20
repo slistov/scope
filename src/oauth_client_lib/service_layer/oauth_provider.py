@@ -127,19 +127,21 @@ class OAuthProvider:
             data=data
         )
 
-    def get_token(self) -> model.Token:
-        return model.Token(self._get_token_str())
+    async def get_token(self) -> model.Token:
+        return model.Token(await self._get_token_str())
 
-    def get_grant(self) -> model.Grant:
-        return model.Grant("refresh_token", self._get_grant_code())
+    async def get_grant(self) -> model.Grant:
+        return model.Grant("refresh_token", await self._get_grant_code())
 
-    def _get_token_str(self):
+    async def _get_token_str(self):
         if self.response.ok:
-            return self.response.json().get("access_token", None)
+            resp_json = await self.response.json()
+            return resp_json.get("access_token", None)
 
-    def _get_grant_code(self):
+    async def _get_grant_code(self):
         if self.response.ok:
-            return self.response.json().get("refresh_token", None)
+            resp_json = await self.response.json()
+            return resp_json.get("refresh_token", None)
 
 
 async def post_async(url, data) -> requests.Response:

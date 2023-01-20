@@ -53,8 +53,11 @@ async def request_token(
     uow: unit_of_work.AbstractUnitOfWork
 ):
     with uow:
-        auth = uow.authorizations.get_by_grant_code(cmd.grant_code)
-        if auth is None or not auth.is_active:
+        if cmd.grant_code:
+            auth = uow.authorizations.get_by_grant_code(cmd.grant_code)
+        elif cmd.token:
+            auth = uow.authorizations.get_by_token(cmd.token)
+        if not auth or not auth.is_active:
             raise exceptions.InvalidGrant("No active authorization found")
 
         old_grant = auth.get_grant_by_code(cmd.grant_code)
@@ -79,8 +82,8 @@ async def request_token(
                 public_keys_url=urls['public_keys']
             )
         await oauth.request_token(grant=old_grant)
-        new_token = oauth.get_token()
-        new_grant = oauth.get_grant()
+        new_token = await oauth.get_token()
+        new_grant = await oauth.get_grant()
         auth.tokens.append(new_token)
         auth.grants.append(new_grant)
         uow.commit()

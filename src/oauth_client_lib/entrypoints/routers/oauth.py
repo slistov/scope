@@ -30,7 +30,7 @@ async def api_oauth_callback(state, code):
             "authorization_code",
             code
         ),
-        commands.RequestToken(code)
+        commands.RequestToken(grant_code=code)
     ]
     results = []
     for msg in actions_todo:

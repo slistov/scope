@@ -1,9 +1,8 @@
 """Команды
 """
 
-# pylint: disable=too-few-public-methods
-from typing import Any
 from dataclasses import dataclass
+from typing import Any
 
 
 class Command:
@@ -54,5 +53,6 @@ class ProcessGrantRecieved(Command):
 @dataclass
 class RequestToken(Command):
     """Запросить токен по гранту"""
-    grant_code: str
+    grant_code: str = None
+    token: str = None
     oauth: Any = None
