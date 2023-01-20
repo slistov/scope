@@ -76,12 +76,13 @@ class OAuthProvider:
         [state_code] = await messagebus.handle(cmd, uow)
         return self._get_oauth_uri(state_code)
 
-    async def request_token(self, code) -> requests.Response:
+    async def request_token(self, grant) -> requests.Response:
         data = self._get_tokenRequest_data(grant=grant)
-        self.response = await self._post(
+        response = await self._post(
             url=self.token_url,
             data=data
         )
+        self.response = response
         return self.response
 
     @staticmethod
@@ -111,8 +112,8 @@ class OAuthProvider:
         else:
             raise exceptions.InvalidGrant(f"Unknown grant type {grant.grant_type} while requesting token")
 
-        assert self.client_id
-        assert self.client_secret
+        assert self.client_id, "Token request: client_id not provided"
+        assert self.client_secret, "Token request: client_secret not provided"
         data.update({
             "client_id": self.client_id,
             "client_secret": self.client_secret,
@@ -120,7 +121,7 @@ class OAuthProvider:
         })
         return data
 
-    async def _post(self, url, data):
+    async def _post(self, url, data) -> requests.Response:
         return await post_async(
             url=url,
             data=data
@@ -133,18 +134,18 @@ class OAuthProvider:
         return model.Grant("refresh_token", self._get_grant_code())
 
     def _get_token_str(self):
-        return self.response.json().get("access_token", None)
-        # return self.response
+        if self.response.ok:
+            return self.response.json().get("access_token", None)
 
     def _get_grant_code(self):
-        return self.response.json().get("refresh_token", None)
-        # return self.response.get("refresh_token", None)
+        if self.response.ok:
+            return self.response.json().get("refresh_token", None)
 
 
-async def post_async(url, data):
+async def post_async(url, data) -> requests.Response:
     async with aiohttp.ClientSession() as session:
         response = await session.post(
             url=url,
             data=data
         )
-        return response.json()
+        return response

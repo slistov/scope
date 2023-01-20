@@ -22,16 +22,17 @@ Message = Union[commands.Command, events.Event]
 
 
 async def get_oauth_uri(state_code):
-    client_id, _ = config.get_oauth_params(provider_name=)
-
+    client_id, _ = config.get_oauth_secrets(provider_name='google')
+    scopes, urls = config.get_oauth_params(provider_name='google')
+    redirect_uri = config.get_oauth_callback_URL()
     params = {
         "response_type": "code",
         "client_id": client_id,
-        "redirect_uri": config.get_oauth_callback_URL(),
-        "scope": config.get_scope(),
+        "redirect_uri": redirect_uri,
+        "scope": ' '.join(scopes),
         "state": state_code
     }
-    return f"{config.get_oauth_host()}?{urlencode(params)}"
+    return f"{urls['code']}?{urlencode(params)}"
 
 
 async def handle(

@@ -44,7 +44,7 @@ states = Table(
     'states', mapper_registry.metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('auth_id', ForeignKey("authorizations.id")),
-    Column('code', String),
+    Column('state', String),
     Column('created', DateTime),
     Column('is_active', Boolean),
 )

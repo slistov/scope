@@ -22,7 +22,8 @@ class Command:
 
 @dataclass
 class CreateAuthorization(Command):
-    source_url: str    
+    source_url: str
+    provider_name: str
     # state_code: str
 
 
@@ -45,7 +46,7 @@ class ProcessGrantRecieved(Command):
         - "authorization_code" (код авторизации)
         - "refresh_token" (токен обновления)
     """
-    state_code: str
+    state: str
     type: str
     code: str
 

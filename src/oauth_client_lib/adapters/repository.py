@@ -40,7 +40,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _get_by_state(self, code) -> model.Authorization:
+    def _get_by_state(self, state) -> model.Authorization:
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -60,11 +60,11 @@ class SQLAlchemyRepository(AbstractRepository):
     def _add(self, auth: model.Authorization):
         self.session.add(auth)
 
-    def _get_by_state(self, code) -> model.Authorization:
+    def _get_by_state(self, state) -> model.Authorization:
         return (
             self.session.query(model.Authorization)
             .join(model.State)
-            .filter(orm.states.c.code == code)
+            .filter(orm.states.c.state == state)
             .first()
         )
 

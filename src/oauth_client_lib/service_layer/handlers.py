@@ -14,7 +14,10 @@ async def create_authorization(
 ) -> str:
     with uow:
         state = model.State()
-        auth = model.Authorization(state=state)
+        auth = model.Authorization(
+            state=state,
+            provider_name=cmd.provider_name
+        )
         uow.authorizations.add(auth)
         uow.commit()
         return state.state
@@ -27,11 +30,11 @@ async def process_grant_recieved(
     """Обработчик команды Обработать код авторизации
     """
     with uow:
-        auth = uow.authorizations.get_by_state_code(cmd.state_code)
+        auth = uow.authorizations.get_by_state_code(cmd.state)
         if auth is None or not auth.is_active:
             raise exceptions.InvalidState("No active authorization found")
 
-        if cmd.type == "authorization_code" and cmd.state_code:
+        if cmd.type == "authorization_code" and cmd.state:
             # Exception: are we under attack?
             if not auth.state.is_active:
                 # if we are, then invoke authorization
@@ -69,10 +72,11 @@ async def request_token(
         if not oauth:
             scopes, urls = config.get_oauth_params(auth.provider_name)
             oauth = oauth_provider.OAuthProvider(
+                provider_name=auth.provider_name,
                 scopes=scopes,
                 code_url=urls['code'],
                 token_url=urls['token'],
-                public_keys_url=urls['keys']
+                public_keys_url=urls['public_keys']
             )
         await oauth.request_token(grant=old_grant)
         new_token = oauth.get_token()

@@ -52,7 +52,7 @@ class OAuthProvider:
     async def _request_public_keys(self):
         assert self.public_keys_url
         result = await async_get_request(self.public_keys_url)
-        return result['keys']
+        return result['public_keys']
 
     async def _get_public_key(self, kid):
         if not self.public_keys or self.public_keys == []:
