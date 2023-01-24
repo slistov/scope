@@ -46,6 +46,7 @@ async def process_grant_recieved(
         grant = model.Grant(grant_type=cmd.type, code=cmd.code)
         auth.grants.append(grant)
         uow.commit()
+        return grant.code
 
 
 async def request_token(
@@ -87,4 +88,4 @@ async def request_token(
         auth.tokens.append(new_token)
         auth.grants.append(new_grant)
         uow.commit()
-        return new_token
+        return new_token.access_token
