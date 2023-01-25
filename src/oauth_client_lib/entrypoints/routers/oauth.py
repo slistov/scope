@@ -32,8 +32,7 @@ async def api_oauth_callback(state, code):
         ),
         commands.RequestToken(grant_code=code)
     ]
-    results = []
     for msg in actions_todo:
-        results.append(await messagebus.handle(msg, uow))
+        results = await messagebus.handle(msg, uow)
     [code, access_token] = results
     return {"access_token": access_token}

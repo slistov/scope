@@ -131,7 +131,9 @@ class OAuthProvider:
         return model.Token(await self._get_token_str())
 
     async def get_grant(self) -> model.Grant:
-        return model.Grant("refresh_token", await self._get_grant_code())
+        code = await self._get_grant_code()
+        if code:
+            return model.Grant("refresh_token", code)
 
     async def _get_token_str(self):
         if self.response.ok:

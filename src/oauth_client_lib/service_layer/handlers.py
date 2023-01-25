@@ -83,9 +83,13 @@ async def request_token(
                 public_keys_url=urls['public_keys']
             )
         await oauth.request_token(grant=old_grant)
+
         new_token = await oauth.get_token()
-        new_grant = await oauth.get_grant()
         auth.tokens.append(new_token)
-        auth.grants.append(new_grant)
+
+        new_grant = await oauth.get_grant()
+        if new_grant:
+            auth.grants.append(new_grant)
+
         uow.commit()
         return new_token.access_token
