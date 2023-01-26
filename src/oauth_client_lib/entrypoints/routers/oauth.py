@@ -34,5 +34,5 @@ async def api_oauth_callback(state, code):
     ]
     for msg in actions_todo:
         results = await messagebus.handle(msg, uow)
-    [code, access_token] = results
+    access_token = results[-1]
     return {"access_token": access_token}
