@@ -4,7 +4,7 @@
 """
 
 from .. import config
-from ..domain import commands, model
+from ..domain import commands, events, model
 from . import exceptions, oauth_provider, unit_of_work
 
 
@@ -23,25 +23,25 @@ async def create_authorization(
         return state.state
 
 
-async def process_grant_recieved(
-    cmd: commands.ProcessGrantRecieved,
+async def auth_code_recieved(
+    evt: events.AuthCodeRecieved,
     uow: unit_of_work.AbstractUnitOfWork
 ):
     """Обработчик команды Обработать код авторизации
     """
     with uow:
-        auth = uow.authorizations.get_by_state_code(cmd.state)
+        auth = uow.authorizations.get_by_state_code(evt.state_code)
         if auth is None or not auth.is_active:
             raise exceptions.InvalidState("No active authorization found")
 
-        if cmd.type == "authorization_code" and cmd.state:
-            # Exception: are we under attack?
-            if not auth.state.is_active:
-                # if we are, then invoke authorization
-                auth.deactivate()
-                uow.commit()
-                raise exceptions.InactiveState("State is inactive")
-            auth.state.deactivate()
+        # Exception: are we under attack?
+        if not auth.state.is_active:
+            # if we are, then invoke authorization
+            auth.deactivate()
+            uow.commit()
+            auth.events.append(commands.deactivate!!!)
+            raise exceptions.InactiveState("State is inactive")
+        auth.state.deactivate()
 
         grant = model.Grant(grant_type=cmd.type, code=cmd.code)
         auth.grants.append(grant)
