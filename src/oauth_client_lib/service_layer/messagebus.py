@@ -49,7 +49,7 @@ async def handle(
     while queue:
         message = queue.pop(0)
         if isinstance(message, events.Event):
-            handle_event(message, queue, uow)
+            await handle_event(message, queue, uow)
         elif isinstance(message, commands.Command):
             cmd_result = await handle_command(message, queue, uow)
             results.append(cmd_result)
@@ -58,7 +58,7 @@ async def handle(
     return results
 
 
-def handle_event(
+async def handle_event(
     event: events.Event,
     queue: List[Message],
     uow: unit_of_work.AbstractUnitOfWork,
@@ -67,7 +67,7 @@ def handle_event(
     for handler in EVENT_HANDLERS[type(event)]:
         try:
             logger.debug("handling event %s with handler %s", event, handler)
-            handler(event, uow=uow)
+            await handler(event, uow=uow)
             queue.extend(uow.collect_new_events())
         except Exception:
             logger.exception("Exception handling event %s", event)
@@ -93,14 +93,11 @@ async def handle_command(
 
 # events Dict
 EVENT_HANDLERS = {
-    # events.TokenRecieved: [handlers.token_recieved],
-    events.AuthCodeRecieved: [handlers.auth_code_recieved]
+    events.AuthCodeRecieved: [handlers.auth_code_recieved],
 }  # type: Dict[Type[events.Event], List[Callable]]
 
 # commands Dict
 COMMAND_HANDLERS = {
-    # commands.CreateState: handlers.create_state,
     commands.CreateAuthorization: handlers.create_authorization,
-    commands.ProcessGrantRecieved: handlers.process_grant_recieved,
     commands.RequestToken: handlers.request_token,
 }  # type: Dict[Type[commands.Command], Callable]

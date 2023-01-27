@@ -4,7 +4,7 @@ from fastapi.routing import APIRouter
 
 from ...service_layer import unit_of_work
 from ...service_layer import messagebus
-from ...service_layer.messagebus import commands
+from ...service_layer.messagebus import commands, events
 
 oauth_router = APIRouter(
     prefix="/oauth",
@@ -24,15 +24,10 @@ async def api_get_oauth_redirect_uri(provider_name):
 @oauth_router.get("/callback")
 async def api_oauth_callback(state, code):
     uow = unit_of_work.SqlAlchemyUnitOfWork()
-    actions_todo = [
-        commands.ProcessGrantRecieved(
-            state,
-            "authorization_code",
-            code
-        ),
-        commands.RequestToken(grant_code=code)
-    ]
-    for msg in actions_todo:
-        results = await messagebus.handle(msg, uow)
+    evt = events.AuthCodeRecieved(
+            state_code=state,
+            grant_code=code,
+        )
+    results = await messagebus.handle(evt, uow)
     access_token = results[-1]
     return {"access_token": access_token}

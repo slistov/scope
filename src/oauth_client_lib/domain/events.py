@@ -27,19 +27,18 @@ class GrantRecieved(Event):
     Вместе с кодом авторизации сервис авторизации должен прислать state.
     (шаг 2 из полного сценария, см. README.md)
     """
-    grant_type: Union[Literal["authorization_code"], Literal["refresh_token"]]
+    # grant_type: Union[Literal["authorization_code"], Literal["refresh_token"]]
     grant_code: str
 
 
 @dataclass
 class AuthCodeRecieved(GrantRecieved):
     state_code: Optional[str]
-    grant_type = "authorization_code"
 
 
 @dataclass
 class RefreshTokenRecieved(GrantRecieved):
-    grant_type = "refresh_token"
+    pass
 
 # @dataclass
 # class TokenRecieved(Event):

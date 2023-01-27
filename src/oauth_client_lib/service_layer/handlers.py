@@ -39,11 +39,14 @@ async def auth_code_recieved(
             # if we are, then invoke authorization
             auth.deactivate()
             uow.commit()
-            auth.events.append(commands.deactivate!!!)
+            # auth.events.append(commands.deactivate!!!)
             raise exceptions.InactiveState("State is inactive")
         auth.state.deactivate()
 
-        grant = model.Grant(grant_type=cmd.type, code=cmd.code)
+        grant = model.Grant(
+            grant_type="authorization_code",
+            code=evt.grant_code
+        )
         auth.grants.append(grant)
         uow.commit()
         return grant.code
