@@ -49,7 +49,10 @@ async def auth_code_recieved(
         )
         auth.grants.append(grant)
         uow.commit()
-        return grant.code
+        # Now, authorization must get access token using the auth code
+        auth.events.append(
+            commands.RequestToken(grant_code=grant.code),
+        )
 
 
 async def request_token(
