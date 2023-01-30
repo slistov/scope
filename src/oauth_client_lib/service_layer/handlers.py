@@ -30,12 +30,11 @@ async def auth_code_recieved(
     """Обработчик команды Обработать код авторизации
     """
     with uow:
-        auth = uow.authorizations.get_by_state_code(evt.state_code)
-        if auth is None or not auth.is_active:
-            raise exceptions.InvalidState("No active authorization found")
+        auth = uow.authorizations.get(state_code=evt.state_code)
+        state = auth.state
 
         # Exception: are we under attack?
-        if not auth.state.is_active:
+        if not state.is_active:
             # if we are, then invoke authorization
             auth.deactivate()
             uow.commit()
@@ -60,12 +59,10 @@ async def request_token(
     uow: unit_of_work.AbstractUnitOfWork
 ):
     with uow:
-        if cmd.grant_code:
-            auth = uow.authorizations.get_by_grant_code(cmd.grant_code)
-        elif cmd.token:
-            auth = uow.authorizations.get_by_token(cmd.token)
-        if not auth or not auth.is_active:
-            raise exceptions.InvalidGrant("No active authorization found")
+        auth = uow.authorizations.get(
+            grant_code=cmd.grant_code,
+            token=cmd.token
+        )
 
         old_grant = auth.get_grant_by_code(cmd.grant_code)
         if not old_grant or not old_grant.is_active:

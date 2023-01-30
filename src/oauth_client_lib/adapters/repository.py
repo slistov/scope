@@ -5,6 +5,7 @@
 import abc
 from . import orm
 from ..domain import model
+from ..service_layer import exceptions
 
 
 class AbstractRepository(abc.ABC):
@@ -17,23 +18,39 @@ class AbstractRepository(abc.ABC):
         self._add(auth)
         self.seen.add(auth)
 
-    def get_by_state_code(self, state_code) -> model.Authorization:
-        auth = self._get_by_state(state_code)
-        if auth:
-            self.seen.add(auth)
+    def get(
+            self,
+            token=None,
+            grant_code=None,
+            state_code=None
+    ) -> model.Authorization:
+        """Get validated authorization
+
+        Just validate auth
+        """
+        auth = self._get_not_validated(token, grant_code, state_code)
+        if auth is None or not auth.is_active:
+            raise exceptions.InvalidState("No active authorization found")
+        self.seen.add(auth)
         return auth
 
-    def get_by_grant_code(self, code) -> model.Authorization:
-        auth = self._get_by_grant_code(code)
-        if auth:
-            self.seen.add(auth)
-        return auth
+    def _get_not_validated(
+            self,
+            token=None,
+            grant_code=None,
+            state_code=None
+    ) -> model.Authorization:
+        """Get non-validated authorization
 
-    def get_by_token(self, token) -> model.Authorization:
-        auth = self._get_by_token(token)
-        if auth:
-            self.seen.add(auth)
-        return auth
+        Just get auth by one of provided params
+        """
+        assert token or grant_code or state_code, "One of params must be provided"
+        if token:
+            return self._get_by_token(token)
+        if grant_code:
+            return self._get_by_grant_code(grant_code)
+        if state_code:
+            return self._get_by_state(state_code)
 
     @abc.abstractmethod
     def _add(self, auth: model.Authorization):
