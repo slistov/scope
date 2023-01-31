@@ -28,11 +28,11 @@ class AbstractRepository(abc.ABC):
 
         Just validate auth
         """
+        assert token or grant_code or state_code, "One of params must be provided"
         auth = self._get_not_validated(token, grant_code, state_code)
-        if auth is None or not auth.is_active:
-            raise exceptions.InvalidState("No active authorization found")
-        self.seen.add(auth)
-        return auth
+        if auth and auth.is_active:
+            self.seen.add(auth)
+            return auth
 
     def _get_not_validated(
             self,
@@ -44,7 +44,6 @@ class AbstractRepository(abc.ABC):
 
         Just get auth by one of provided params
         """
-        assert token or grant_code or state_code, "One of params must be provided"
         if token:
             return self._get_by_token(token)
         if grant_code:

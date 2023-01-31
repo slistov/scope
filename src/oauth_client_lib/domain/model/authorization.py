@@ -37,7 +37,7 @@ class Authorization:
         self.created = created if created else datetime.utcnow()
         self.events = []
 
-    def get_grant_by_code(self, code: str):
+    def get_grant(self, code: str):
         return next(grant for grant in self.grants if grant.code == code)
 
     def get_active_grant(self):

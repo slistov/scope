@@ -63,11 +63,13 @@ async def request_token(
             grant_code=cmd.grant_code,
             token=cmd.token
         )
+        if not auth:
+            raise exceptions.OAuthError("No active authorization found")
 
-        old_grant = auth.get_grant_by_code(cmd.grant_code)
-        if not old_grant or not old_grant.is_active:
+        old_grant = auth.get_active_grant()
+        if not old_grant:
             raise exceptions.InvalidGrant(
-                "No grant found for token requesting"
+                "No grant found to request token"
             )
         old_grant.deactivate()
 
