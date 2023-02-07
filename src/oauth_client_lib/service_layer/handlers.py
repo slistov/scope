@@ -27,7 +27,16 @@ async def auth_code_recieved(
     evt: events.AuthCodeRecieved,
     uow: unit_of_work.AbstractUnitOfWork
 ):
-    """Обработчик команды Обработать код авторизации
+    """Process authorization code recieved
+
+    Authorization service provides an auth code,
+    that must be used to request token.
+
+    Here we save authorization code
+    for authorization found by state.
+
+    At the end, handler appends command
+    for the Authorization: 'Now go and get your token!'
     """
     with uow:
         auth = uow.authorizations.get(state_code=evt.state_code)
@@ -38,10 +47,10 @@ async def auth_code_recieved(
             # if we are, then invoke authorization
             auth.deactivate()
             uow.commit()
-            # auth.events.append(commands.deactivate!!!)
             raise exceptions.InactiveState("State is inactive")
-        auth.state.deactivate()
+        state.deactivate()
 
+        # Authorization code is a grant to request token
         grant = model.Grant(
             grant_type="authorization_code",
             code=evt.grant_code
