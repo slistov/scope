@@ -93,7 +93,7 @@ async def handle_command(
 
 # events Dict
 EVENT_HANDLERS = {
-    events.AuthCodeRecieved: [handlers.auth_code_recieved,],
+    events.AuthCodeRecieved: [handlers.auth_code_recieved, ],
 }  # type: Dict[Type[events.Event], List[Callable]]
 
 # commands Dict

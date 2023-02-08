@@ -67,6 +67,8 @@ async def request_token(
     cmd: commands.RequestToken,
     uow: unit_of_work.AbstractUnitOfWork
 ):
+    """Request token from OAuth2 provider
+    """
     with uow:
         auth = uow.authorizations.get(
             grant_code=cmd.grant_code,
@@ -78,7 +80,7 @@ async def request_token(
         old_grant = auth.get_active_grant()
         if not old_grant:
             raise exceptions.InvalidGrant(
-                "No grant found to request token"
+                "No active grant found to request token"
             )
         old_grant.deactivate()
 
@@ -86,6 +88,7 @@ async def request_token(
         if old_token:
             old_token.deactivate()
 
+        # We can pass custom oauth for test purposes
         oauth = cmd.oauth
         if not oauth:
             scopes, urls = config.get_oauth_params(auth.provider_name)
@@ -96,13 +99,19 @@ async def request_token(
                 token_url=urls['token'],
                 public_keys_url=urls['public_keys']
             )
-        await oauth.request_token(grant=old_grant)
+        r = await oauth.request_token(grant=old_grant)
 
-        new_token = await oauth.get_token()
+        if not r:
+            raise exceptions.OAuthError("Couldn't request token")
+
+        new_token = model.Token(**r)
         auth.tokens.append(new_token)
 
-        new_grant = await oauth.get_grant()
-        if new_grant:
+        if "refresh_token" in r:
+            new_grant = model.Grant(
+                grant_type="refresh_token",
+                code=r["refresh_token"]
+            )
             auth.grants.append(new_grant)
 
         uow.commit()

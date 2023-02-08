@@ -25,12 +25,13 @@ class OAuthProvider:
         scopes=[],
         public_keys_url='',
     ):
-        (
-            _scopes,
-            _code_url,
-            _token_url,
-            _public_keys_url
-        ) = self.__class__._get_provider_params(provider_name)
+        if not (scopes and code_url and token_url and public_keys_url):
+            (
+                _scopes,
+                _code_url,
+                _token_url,
+                _public_keys_url
+            ) = self.__class__._get_provider_params(provider_name)
 
         self.provider_name = provider_name
         self.code_url = code_url if code_url else _code_url
@@ -38,30 +39,33 @@ class OAuthProvider:
         self.scopes = scopes if scopes else _scopes
         self.public_keys_url = public_keys_url if public_keys_url else _public_keys_url
 
-        (
-            self.client_id,
-            self.client_secret
-        ) = self.__class__._get_oauth_secrets(provider_name)
+        if not (client_id and client_secret):
+            (
+                _client_id,
+                _client_secret
+            ) = self.__class__._get_oauth_secrets(provider_name)
+        self.client_id = client_id if client_id else _client_id
+        self.client_secret = client_secret if client_secret else _client_secret
 
-    @classmethod
-    def by_state(cls, state):
-        """OAuthProvider constructor by state"""
-        s = model.State(state)
-        a = model.Authorization(state=s)
+    # @classmethod
+    # def by_state(cls, state):
+    #     """OAuthProvider constructor by state"""
+    #     s = model.State(state)
+    #     a = model.Authorization(state=s)
 
-        uow = unit_of_work.SqlAlchemyUnitOfWork()
-        actions_todo = [
-            commands.ProcessGrantRecieved(
-                params.state,
-                "authorization_code",
-                params.code
-            ),
-            commands.RequestToken(params.code)
-        ]
-        for msg in actions_todo:
-            messagebus.handle(msg, uow)
+    #     uow = unit_of_work.SqlAlchemyUnitOfWork()
+    #     actions_todo = [
+    #         commands.ProcessGrantRecieved(
+    #             params.state,
+    #             "authorization_code",
+    #             params.code
+    #         ),
+    #         commands.RequestToken(params.code)
+    #     ]
+    #     for msg in actions_todo:
+    #         messagebus.handle(msg, uow)
 
-        return cls(a.provider_name)
+    #     return cls(a.provider_name)
 
     @staticmethod
     def _get_oauth_secrets(provider_name):
@@ -77,13 +81,13 @@ class OAuthProvider:
         return self._get_oauth_uri(state_code)
 
     async def request_token(self, grant) -> requests.Response:
-        data = self._get_tokenRequest_data(grant=grant)
+        data = self._get_data_for_token_request(grant=grant)
         response = await self._post(
             url=self.token_url,
             data=data
         )
-        self.response = response
-        return self.response
+        if response.ok:
+            return await response.json()
 
     @staticmethod
     def _get_provider_params(name):
@@ -101,7 +105,7 @@ class OAuthProvider:
         uri = f"{self.code_url}?{urlencode(params,)}"
         return uri
 
-    def _get_tokenRequest_data(self, grant):
+    def _get_data_for_token_request(self, grant):
         if grant.grant_type == "authorization_code":
             data = {
                 "code": grant.code,
@@ -110,7 +114,9 @@ class OAuthProvider:
         elif grant.grant_type == "refresh_token":
             data = {"refresh_token": grant.code}
         else:
-            raise exceptions.InvalidGrant(f"Unknown grant type {grant.grant_type} while requesting token")
+            raise exceptions.InvalidGrant(
+                f"Unknown grant type {grant.grant_type} while requesting token"
+            )
 
         assert self.client_id, "Token request: client_id not provided"
         assert self.client_secret, "Token request: client_secret not provided"
@@ -127,23 +133,23 @@ class OAuthProvider:
             data=data
         )
 
-    async def get_token(self) -> model.Token:
-        return model.Token(await self._get_token_str())
+    # async def get_token(self) -> model.Token:
+    #     return model.Token(await self._get_token_str())
 
-    async def get_grant(self) -> model.Grant:
-        code = await self._get_grant_code()
-        if code:
-            return model.Grant("refresh_token", code)
+    # async def get_grant(self) -> model.Grant:
+    #     code = await self._get_grant_code()
+    #     if code:
+    #         return model.Grant("refresh_token", code)
 
-    async def _get_token_str(self):
-        if self.response.ok:
-            resp_json = await self.response.json()
-            return resp_json.get("access_token", None)
+    # async def _get_token_str(self):
+    #     if self.response.ok:
+    #         resp_json = await self.response.json()
+    #         return resp_json.get("access_token", None)
 
-    async def _get_grant_code(self):
-        if self.response.ok:
-            resp_json = await self.response.json()
-            return resp_json.get("refresh_token", None)
+    # async def _get_grant_code(self):
+    #     if self.response.ok:
+    #         resp_json = await self.response.json()
+    #         return resp_json.get("refresh_token", None)
 
 
 async def post_async(url, data) -> requests.Response:
