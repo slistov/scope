@@ -8,7 +8,7 @@ passlib
 fastapi_mail
 bcrypt
 
-# oauth-client-lib @ git+https://github.com/slistov/oauth-client-lib.git@dev#egg=oauth-client-lib
+oauth-client-lib @ git+https://github.com/slistov/oauth-client-lib.git@dev#egg=oauth-client-lib
 
 # google-api-python-client
 # google-auth 
