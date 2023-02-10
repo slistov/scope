@@ -1,11 +1,11 @@
 from fastapi import FastAPI, Response, status
+from oauth_client_lib import oauth_router
+# from oauth_client_lib.entrypoints.routers.oauth import oauth_router
 from starlette.middleware.sessions import SessionMiddleware
-
-from .routers import account_router
-from oauth_client_lib.entrypoints.routers.oauth import oauth_router
 
 from ..adapters import orm
 from ..domain.security import generate_client_secret
+from .routers import account_router
 
 app = FastAPI()
 orm.start_mappers()
