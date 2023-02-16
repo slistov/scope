@@ -3,10 +3,10 @@ from urllib.parse import urlencode
 
 import pytest
 
-from src.scope.adapters.oauth.provider import OAuthProvider
-from src.scope.adapters.oauth.requester import OAuthRequester
-from src.scope.domain import model
-from src.scope.service_layer import exceptions, services
+from scope.adapters.oauth.provider import OAuthProvider
+from scope.adapters.oauth.requester import OAuthRequester
+from scope.domain import model
+from scope.service_layer import exceptions, services
 
 
 class FakeOAuthProvider(OAuthProvider):

@@ -1,19 +1,18 @@
-from fastapi.exceptions import HTTPException
 from src.scope.domain import model
 from src.scope.domain.security import verify_password
 
 
 # TODO is not completed
-class FakeOAuthRequester():
-    def validate_token(self, token: str):
-        if not token == 'test_token':
-            raise HTTPException(
-                status_code=400,
-                detail={'error': 'not test_token'}
-            )
-        scopes = "read write".split()
-        self.scopes.update({token: scopes})
-        return True
+# class FakeOAuthRequester():
+#     def validate_token(self, token: str):
+#         if not token == 'test_token':
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail={'error': 'not test_token'}
+#             )
+#         scopes = "read write".split()
+#         self.scopes.update({token: scopes})
+#         return True
 
 
 class TestEmailCheckCode:
@@ -49,6 +48,12 @@ class TestAccount:
         )
         assert verify_password("test_password", account.get_hashed_password())
 
+
+class TestUserSideAuthorization:
+    def test_APIcall_returns_oauthProviderURL(self, test_client):
+        response = test_client.get("/api/oauth/redirect?provider=google")
+        assert response.ok
+        assert response.json().keys() >= ["response_type", "client_id", "redirect_uri", "scope", ]
 
 # class TestAccountCreation
 # FakeRepo must be used

@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Response, status
+
 from oauth_client_lib import oauth_router
-# from oauth_client_lib.entrypoints.routers.oauth import oauth_router
 from starlette.middleware.sessions import SessionMiddleware
 
 from ..adapters import orm
