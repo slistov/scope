@@ -3,19 +3,6 @@ from src.scope.domain.security import verify_password
 from urllib.parse import urlparse, parse_qs
 
 
-# TODO is not completed
-# class FakeOAuthRequester():
-#     def validate_token(self, token: str):
-#         if not token == 'test_token':
-#             raise HTTPException(
-#                 status_code=400,
-#                 detail={'error': 'not test_token'}
-#             )
-#         scopes = "read write".split()
-#         self.scopes.update({token: scopes})
-#         return True
-
-
 class TestEmailCheckCode:
     def test_generate_check_code(self):
         email = model.Email("test@test.com")
@@ -54,6 +41,23 @@ class TestAccount:
 class TestUserSideAuthorization:
     def test_APIcall_returns_oauthProviderURL(self, test_client):
         """Must return redirect url
+
+        App imports oauth_client_lib's router.
+        The router's API:
+        Gets param
+            provider
+        Ex.:
+            /oauth/authorize?provider=google
+
+        Returns
+            oauth provider url
+        Ex.:
+            '"https://accounts.google.com/o/oauth2/v2/auth?
+            response_type=code
+            &client_id=655857588737-dvupl27ddl03qceusdli8q229s065hlh.apps.googleusercontent.com
+            &redirect_uri=http://127.0.0.1:8000/api/oauth/callback
+            &scope=https://www.googleapis.com/auth/userinfo.email+openid
+            &state=some_state_code"'
         """
         response = test_client.get("/api/oauth/redirect?provider=google")
         assert response.ok
@@ -65,7 +69,5 @@ class TestUserSideAuthorization:
             "client_id",
             "redirect_uri",
             "scope",
+            "state",
         ]).issubset(query_as_dict)
-
-# class TestAccountCreation
-# FakeRepo must be used
