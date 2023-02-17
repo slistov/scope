@@ -1,5 +1,6 @@
 from src.scope.domain import model
 from src.scope.domain.security import verify_password
+from urllib.parse import urlparse, parse_qs
 
 
 # TODO is not completed
@@ -44,16 +45,27 @@ class TestAccount:
 
     def test_hashed_password(self):
         account = model.Account(
-            email="test@test.com", password="test_password"
+            email=model.Email("test@test.com"), 
+            password="test_password"
         )
         assert verify_password("test_password", account.get_hashed_password())
 
 
 class TestUserSideAuthorization:
     def test_APIcall_returns_oauthProviderURL(self, test_client):
+        """Must return redirect url
+        """
         response = test_client.get("/api/oauth/redirect?provider=google")
         assert response.ok
-        assert response.json().keys() >= ["response_type", "client_id", "redirect_uri", "scope", ]
+
+        parsed_url = urlparse(response.text)
+        query_as_dict = parse_qs(parsed_url.query)
+        assert set([
+            "response_type",
+            "client_id",
+            "redirect_uri",
+            "scope",
+        ]).issubset(query_as_dict)
 
 # class TestAccountCreation
 # FakeRepo must be used
